@@ -78,7 +78,7 @@ object NetworkModule {
     @Singleton
     @SpeechifyOkHttp
     fun provideSpeechifyOkHTTPClient(
-        @Named(DEFAULT_TIMEOUT) defaultTimeOut: Long,
+        @Named(LLM_TIMEOUT) defaultTimeOut: Long,
         loggingInterceptor: HttpLoggingInterceptor,
         @SpeechifyAuth authInterceptor: Interceptor
     ): OkHttpClient =
