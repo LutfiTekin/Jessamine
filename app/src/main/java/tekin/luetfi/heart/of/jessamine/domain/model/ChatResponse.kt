@@ -1,6 +1,7 @@
 package tekin.luetfi.heart.of.jessamine.domain.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 
@@ -15,13 +16,14 @@ data class ChatCompletionResponse(
     data class Choice(
         val index: Int,
         val message: ChatMessage,
-        @field:Json("finish_reason") val finishReason: String?
+        val finish_reason: String?
     )
     data class Usage(
-        @field:Json("prompt_tokens") val promptTokens: Int,
-        @field:Json("completion_tokens") val completionTokens: Int,
-        @field:Json("total_tokens") val totalTokens: Int
+        val prompt_tokens: Int,
+        val completion_tokens: Int,
+        val total_tokens: Int
     )
+
 
 
 

@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import tekin.luetfi.simple.map.currentLocation
 import tekin.luetfi.simple.map.data.model.Coordinates
 import tekin.luetfi.simple.map.hasLocationPermission
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -46,13 +46,15 @@ object AppModule {
     // The shared, refreshable coordinates stream
     @Provides
     @Singleton
+    @CurrentLocationFlow
     fun provideLocationFlow(
         @ApplicationScope scope: CoroutineScope,
         @ApplicationContext app: Context,
-        @LocationPermissionFlow permissionFlow: StateFlow<Boolean>
+        @LocationPermissionFlow permissionFlow: MutableStateFlow<Boolean>
     ): StateFlow<Coordinates> {
         val gated = permissionFlow
             .flatMapLatest { granted ->
+                println("Granted: $granted")
                 if (granted) app.currentLocation() else flowOf(Coordinates.majorCities.random())
             }
         return gated.stateIn(

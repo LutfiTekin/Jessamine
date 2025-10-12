@@ -6,6 +6,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class SpeechRequest(
     val input: String,
-    @field:Json(name = "voice_id") val voiceId: String
+    @field:Json(name = "voice_id") val voiceId: String = "erin"
 )
 

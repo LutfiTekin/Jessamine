@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import tekin.luetfi.heart.of.jessamine.di.LocationPermissionFlow
+import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
 import tekin.luetfi.heart.of.jessamine.ui.theme.JessamineTheme
 import tekin.luetfi.simple.map.hasLocationPermission
 import tekin.luetfi.simple.map.ui.DynamicBackground
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
             JessamineTheme {
                 val hasPermission by locationPermission.collectAsStateWithLifecycle()
                 DynamicBackground(modifier = Modifier, hasLocationPermission = hasPermission)
+                EchoesScreen(modifier = Modifier.fillMaxSize())
             }
         }
     }

@@ -34,6 +34,7 @@ fun ApplicationDefaultConfig.populateBuildConfigFields(){
      */
     buildConfigField("String", "OPENROUTERAI_API", "\"https://openrouter.ai/api/v1/\"")
     buildConfigField("String", "SPEECHIFY_API", "\"https://api.sws.speechify.com/\"")
+    buildConfigField("String", "WIKIPEDIA_API", "\"https://en.wikipedia.org/\"")
 
     /**
      * API Keys
@@ -45,6 +46,7 @@ fun ApplicationDefaultConfig.populateBuildConfigFields(){
      * Other
      */
     buildConfigField("String", "OPEN_ROUTER_APP_NAME", "\"Jessamine\"")
+    buildConfigField("String", "APP_USER_AGENT", "\"Jessamine/1.0 (https://github.com/LutfiTekin/Jessamine) OkHttp/4.x\"")
 }
 
 
@@ -144,6 +146,9 @@ dependencies {
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    //Media
+    implementation(libs.androidx.media3.exoplayer)
 
 
     // Testing

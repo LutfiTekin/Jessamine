@@ -15,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tekin.luetfi.heart.of.jessamine.BuildConfig
+import tekin.luetfi.heart.of.jessamine.util.UserAgentInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -44,7 +45,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @SpeechifyOkHttp
+    @DefaultOkHttp
     fun provideOkHTTPClient(
         @Named(DEFAULT_TIMEOUT) defaultTimeOut: Long,
         loggingInterceptor: HttpLoggingInterceptor
@@ -53,6 +54,7 @@ object NetworkModule {
             .connectTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
             .writeTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
             .readTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
+            .addNetworkInterceptor(UserAgentInterceptor())
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -62,7 +64,7 @@ object NetworkModule {
     fun provideORAOkHTTPClient(
         @Named(LLM_TIMEOUT) defaultTimeOut: Long,
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: Interceptor
+        @OpenRouterAuth authInterceptor: Interceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
@@ -72,13 +74,45 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .build()
 
+    @Provides
+    @Singleton
+    @SpeechifyOkHttp
+    fun provideSpeechifyOkHTTPClient(
+        @Named(DEFAULT_TIMEOUT) defaultTimeOut: Long,
+        loggingInterceptor: HttpLoggingInterceptor,
+        @SpeechifyAuth authInterceptor: Interceptor
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
+            .writeTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
+            .readTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
+            .addNetworkInterceptor(UserAgentInterceptor())
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
 
     @Provides
     @Singleton
+    @OpenRouterAuth
     fun provideOpenRouterAuthInterceptor(@ApplicationContext context: Context): Interceptor = Interceptor { chain ->
         val original = chain.request()
         val builder = original.newBuilder()
             .header("Authorization", "Bearer ${BuildConfig.OPENROUTERAI_API_KEY}")
+            //Optional but recommended by OpenRouter
+            .header("HTTP-Referer", context.packageName)
+            .header("X-Title", BuildConfig.OPEN_ROUTER_APP_NAME)
+
+        chain.proceed(builder.build())
+    }
+
+    @Provides
+    @Singleton
+    @SpeechifyAuth
+    fun provideSpeechifyAuthInterceptor(@ApplicationContext context: Context): Interceptor = Interceptor { chain ->
+        val original = chain.request()
+        val builder = original.newBuilder()
+            .header("Authorization", "Bearer ${BuildConfig.SPEECHIFY_API_KEY}")
             //Optional but recommended by OpenRouter
             .header("HTTP-Referer", context.packageName)
             .header("X-Title", BuildConfig.OPEN_ROUTER_APP_NAME)
@@ -110,16 +144,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @SpeechifyApi
+    @Speechify
     fun provideSpeechifyRetrofit(
         @SpeechifyOkHttp okHttpClient: OkHttpClient, moshiConverter: MoshiConverterFactory
     ): Retrofit = retrofit(BuildConfig.SPEECHIFY_API, okHttpClient, moshiConverter)
 
     @Provides
     @Singleton
-    @OpenRouterApi
+    @OpenRouterAi
     fun provideRetrofitORA(
         @OpenRouterOkHttp okHttpClient: OkHttpClient, moshiConverter: MoshiConverterFactory
     ): Retrofit = retrofit(BuildConfig.OPENROUTERAI_API, okHttpClient, moshiConverter)
+
+    @Provides
+    @Singleton
+    @MediaWiki
+    fun provideMediaWikiApi(
+        @DefaultOkHttp okHttpClient: OkHttpClient, moshiConverter: MoshiConverterFactory
+    ): Retrofit = retrofit(BuildConfig.WIKIPEDIA_API, okHttpClient, moshiConverter)
 
 }

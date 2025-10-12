@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
@@ -68,7 +69,7 @@ fun Context.currentLocation(
     intervalMillis: Long = 5_000L,
     minUpdateIntervalMillis: Long = 2_000L,
     minUpdateDistanceMeters: Float = 0f,
-    priority: Int = Priority.PRIORITY_BALANCED_POWER_ACCURACY
+    priority: Int = Priority.PRIORITY_HIGH_ACCURACY
 ): Flow<Coordinates> = callbackFlow {
 
     if (hasLocationPermission.not()){
@@ -78,6 +79,12 @@ fun Context.currentLocation(
     }
 
     val fused = LocationServices.getFusedLocationProviderClient(this@currentLocation)
+
+    fused.lastLocation.addOnSuccessListener { location: Location? ->
+        if (location != null) {
+            trySend(Coordinates(location.latitude, location.longitude))
+        }
+    }
 
     val request = LocationRequest.Builder(intervalMillis)
         .setPriority(priority)
