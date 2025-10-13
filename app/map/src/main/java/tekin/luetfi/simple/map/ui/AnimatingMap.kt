@@ -30,7 +30,8 @@ fun AnimatingMap(
     cities: List<Coordinates> = Coordinates.majorCities,
     showPlaceName: Boolean = false,
     currentCoordinates: (Coordinates) -> Unit = {},
-    focused: Boolean = false
+    focused: Boolean = false,
+    overlayEnabled: Boolean = false
 ) {
 
     var selectedCoordinates by remember(cities) { mutableStateOf(cities.first()) }
@@ -58,10 +59,12 @@ fun AnimatingMap(
             coordinates = selectedCoordinates,
             focused = focused
         )
-        ForegroundOverlay(
-            modifier = Modifier.fillMaxSize(),
-            isDark = false
-        )
+        if (overlayEnabled) {
+            ForegroundOverlay(
+                modifier = Modifier.fillMaxSize(),
+                isDark = false
+            )
+        }
 
         // Text positioned at the bottom right
         if (showPlaceName) {

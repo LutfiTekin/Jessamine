@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.data.local.LocationLore
-import tekin.luetfi.heart.of.jessamine.data.local.Place
+import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.data.remote.MediaWikiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.SpeechifyApi

@@ -89,8 +89,10 @@ fun EchoesScreen(modifier: Modifier){
                     Text(
                         modifier = modifier,
                         text = place.uppercase(),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center)
                 }
             }
 
@@ -104,6 +106,7 @@ fun EchoesScreen(modifier: Modifier){
                 text = initialScreenText(),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center)
         }
         Box(

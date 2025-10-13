@@ -17,7 +17,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
-import tekin.luetfi.heart.of.jessamine.data.local.Place
+import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.di.LocationPermissionFlow
 import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
 import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesViewModel

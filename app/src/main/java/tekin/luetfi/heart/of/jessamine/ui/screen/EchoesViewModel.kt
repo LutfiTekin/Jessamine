@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import tekin.luetfi.heart.of.jessamine.data.local.LocationLore
-import tekin.luetfi.heart.of.jessamine.data.local.Place
+import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.di.CurrentLocationFlow
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
 import tekin.luetfi.simple.map.data.model.Coordinates
