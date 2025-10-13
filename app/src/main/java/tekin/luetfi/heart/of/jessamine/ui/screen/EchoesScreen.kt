@@ -16,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.exoplayer.ExoPlayer
+import tekin.luetfi.heart.of.jessamine.R
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
 
@@ -46,6 +50,13 @@ fun EchoesScreen(modifier: Modifier){
     val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
 
 
+    val initialState = remember(isMediaSectionActive,currentPlace) {
+        isMediaSectionActive.not()
+                && playbackViewModel.exoPlayer.mediaItemCount == 0
+                && currentPlace == null
+    }
+
+
 
 
     LaunchedEffect(audioData) {
@@ -59,7 +70,9 @@ fun EchoesScreen(modifier: Modifier){
 
     Box(modifier = modifier.fillMaxSize()){
         Column(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -77,14 +90,23 @@ fun EchoesScreen(modifier: Modifier){
                     fontWeight = FontWeight.SemiBold)
             }
 
-
+        }
+        if (initialState) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+                    .align(Alignment.Center),
+                text = initialScreenText(),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold)
         }
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent)
-                .clickable{
-                    if (!isPlaying){
+                .clickable {
+                    if (!isPlaying) {
                         viewModel.getLocationLore(currentCoordinates)
                     }
                 }) {
@@ -99,6 +121,22 @@ fun EchoesScreen(modifier: Modifier){
 
 
 
+}
+
+@Composable
+fun initialScreenText(): String{
+    return arrayOf(
+        stringResource(R.string.unseal_the_truth),
+        stringResource(R.string.the_stone_remembers),
+        stringResource(R.string.let_the_rot_speak),
+        stringResource(R.string.hear_the_echoes),
+        stringResource(R.string.open_my_eye),
+        stringResource(R.string.the_sin_is_deep),
+        stringResource(R.string.the_secrets_await),
+        stringResource(R.string.let_the_silence_break),
+        stringResource(R.string.the_walls_bleed_memory),
+        stringResource(R.string.draw_the_story_out)
+    ).random().uppercase()
 }
 
 

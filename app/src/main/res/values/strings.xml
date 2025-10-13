@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Jessamine</string>
+    <string name="unseal_the_truth">Unseal the truth.</string>
+    <string name="the_stone_remembers">The stone remembers.</string>
+    <string name="let_the_rot_speak">Let the rot speak.</string>
+    <string name="hear_the_echoes">Hear the echoes.</string>
+    <string name="open_my_eye">Open my eye.</string>
+    <string name="the_sin_is_deep">The sin is deep.</string>
+    <string name="the_secrets_await">The secrets await.</string>
+    <string name="let_the_silence_break">Let the silence break.</string>
+    <string name="the_walls_bleed_memory">The walls bleed memory.</string>
+    <string name="draw_the_story_out">Draw the story out.</string>
 </resources>
