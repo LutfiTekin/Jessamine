@@ -20,7 +20,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
-        buildConfigField("String", "MAP_STYLE", "\"https://liveno.net/utils/map/light.json\"")
+        buildConfigField("String", "MAP_STYLE", "\"https://lutfitekin.github.io/Jessamine/vintage_map.json\"")
     }
 
     buildTypes {
