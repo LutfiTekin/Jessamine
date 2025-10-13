@@ -12,6 +12,7 @@ interface LocationInfoRepository {
 
     val speechData : Flow<SpeechResponse?>
 
+    val currentPlace : Flow<String?>
 
     suspend fun getLocationLore(coordinates: Coordinates): LocationLore
 }

@@ -26,6 +26,8 @@ class EchoesViewModel @Inject constructor(
     private val _locationLore = MutableStateFlow(LocationLore())
     val locationLore: StateFlow<LocationLore> = _locationLore
 
+    val currentPlace = locationInfoRepository.currentPlace
+
     val audioData: StateFlow<String?> = locationInfoRepository.speechData.map { it?.audioData }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),

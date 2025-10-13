@@ -2,6 +2,7 @@ package tekin.luetfi.heart.of.jessamine.data.repository
 
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -37,6 +38,10 @@ class DefaultLocationInfoRepository(
         }
     }
 
+    private val _currentPlace = MutableStateFlow<String?>(null)
+    override val currentPlace = _currentPlace.asStateFlow()
+
+
     override suspend fun getLocationLore(coordinates: Coordinates): LocationLore {
         val geoSearchString = coordinates.geoSearchString
         //Get geo location info
@@ -49,7 +54,7 @@ class DefaultLocationInfoRepository(
         val firstPlace = geoQuery.query?.geoSearch?.random()
         val placeName = firstPlace?.title ?: "Unknown Place"
 
-
+        _currentPlace.emit(placeName)
 
         val messages = listOf(
             ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),
@@ -65,7 +70,7 @@ class DefaultLocationInfoRepository(
 
         try {
             return openRouterApi.getChatCompletion(request).parseResponseOrNull<LocationLore>(moshi)
-                ?.copy(place = placeName)?.also {
+                ?.also {
                     withContext(Dispatchers.IO) {
                         launch {
                             synthesizeWhispers(it)

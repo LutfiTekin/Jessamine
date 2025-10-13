@@ -15,6 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -32,6 +34,9 @@ fun EchoesScreen(modifier: Modifier){
     val audioData by viewModel.audioData.collectAsStateWithLifecycle()
     val speechMarks by viewModel.speechMarks.collectAsStateWithLifecycle()
     val playerRef = playbackViewModel.exoPlayer
+    val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
+
+
 
     LaunchedEffect(audioData) {
         if (isPlaying)
@@ -55,8 +60,11 @@ fun EchoesScreen(modifier: Modifier){
                     speechMarks = speechMarks)
             }
 
-            if (!locationLore.place.isNullOrBlank()){
-                Text(text = locationLore.place.orEmpty().uppercase(), textAlign = TextAlign.Center)
+            if (!currentPlace.isNullOrBlank()){
+                Text(
+                    text = currentPlace.orEmpty().uppercase(),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold)
             }
             if (!isPlaying){
                 Button(onClick = { viewModel.getLocationLore(currentCoordinates) }) {
