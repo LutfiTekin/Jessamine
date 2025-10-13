@@ -3,6 +3,7 @@ package tekin.luetfi.heart.of.jessamine.ui.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import tekin.luetfi.heart.of.jessamine.data.local.LocationLore
+import tekin.luetfi.heart.of.jessamine.data.local.Place
 import tekin.luetfi.heart.of.jessamine.di.CurrentLocationFlow
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
 import tekin.luetfi.simple.map.data.model.Coordinates
@@ -26,7 +28,7 @@ class EchoesViewModel @Inject constructor(
     private val _locationLore = MutableStateFlow(LocationLore())
     val locationLore: StateFlow<LocationLore> = _locationLore
 
-    val currentPlace = locationInfoRepository.currentPlace
+    val currentPlace: Flow<Place?> = locationInfoRepository.currentPlace
 
     val audioData: StateFlow<String?> = locationInfoRepository.speechData.map { it?.audioData }.stateIn(
         scope = viewModelScope,

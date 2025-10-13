@@ -1,5 +1,7 @@
 package tekin.luetfi.heart.of.jessamine.ui.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +35,6 @@ fun EchoesScreen(modifier: Modifier){
     val playbackViewModel: PlaybackViewModel = hiltViewModel()
     val isPlaying by playbackViewModel.isPlaying.collectAsStateWithLifecycle()
     val currentCoordinates by viewModel.currentCoordinates.collectAsStateWithLifecycle()
-    val locationLore by viewModel.locationLore.collectAsStateWithLifecycle()
     val audioData by viewModel.audioData.collectAsStateWithLifecycle()
     val speechMarks by viewModel.speechMarks.collectAsStateWithLifecycle()
     val playerRef = playbackViewModel.exoPlayer
@@ -60,17 +64,24 @@ fun EchoesScreen(modifier: Modifier){
                     speechMarks = speechMarks)
             }
 
-            if (!currentPlace.isNullOrBlank()){
+            currentPlace?.name?.let {
                 Text(
-                    text = currentPlace.orEmpty().uppercase(),
+                    text = it.uppercase(),
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.SemiBold)
             }
-            if (!isPlaying){
-                Button(onClick = { viewModel.getLocationLore(currentCoordinates) }) {
-                    Text(text = "Listen")
-                }
-            }
+
+
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent)
+                .clickable{
+                    if (!isPlaying){
+                        viewModel.getLocationLore(currentCoordinates)
+                    }
+                }) {
 
         }
     }

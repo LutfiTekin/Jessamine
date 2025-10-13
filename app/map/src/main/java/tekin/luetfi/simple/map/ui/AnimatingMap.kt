@@ -28,8 +28,9 @@ const val MAP_ANIMATION_DURATION: Int = 2000
 fun AnimatingMap(
     modifier: Modifier = Modifier,
     cities: List<Coordinates> = Coordinates.majorCities,
-    showCityName: Boolean = false,
-    currentCoordinates: (Coordinates) -> Unit = {}
+    showPlaceName: Boolean = false,
+    currentCoordinates: (Coordinates) -> Unit = {},
+    focused: Boolean = false
 ) {
 
     var selectedCoordinates by remember(cities) { mutableStateOf(cities.first()) }
@@ -54,7 +55,8 @@ fun AnimatingMap(
     Box(modifier = modifier.fillMaxSize()) { // This Box will contain both map and text
         SimpleCityMap(
             modifier = Modifier.matchParentSize(), // Map fills the Box
-            coordinates = selectedCoordinates
+            coordinates = selectedCoordinates,
+            focused = focused
         )
         ForegroundOverlay(
             modifier = Modifier.fillMaxSize(),
@@ -62,7 +64,7 @@ fun AnimatingMap(
         )
 
         // Text positioned at the bottom right
-        if (showCityName) {
+        if (showPlaceName) {
             Text(
                 text = selectedCoordinates.toString(), // Assuming zoneCode() returns a String
                 color = Color.Black, // Choose a color that's visible on your map

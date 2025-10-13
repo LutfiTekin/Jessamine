@@ -24,6 +24,7 @@ import tekin.luetfi.simple.map.data.model.Coordinates
 fun SimpleCityMap(
     modifier: Modifier,
     coordinates: Coordinates,
+    focused: Boolean = false,
     userInteractionEnabled: Boolean = false
 ) {
     val context = LocalContext.current
@@ -77,7 +78,8 @@ fun SimpleCityMap(
 
                 // Calculate bounds based on the given coordinate with 2x area
                 val baseDelta = 0.01 // Base delta for the area around the coordinate
-                val expandedDelta = baseDelta * 1.25 // 2x expansion
+                val zoomFactor: Double = if (focused) 0.2 else 1.toDouble()
+                val expandedDelta = baseDelta * 1.25 * zoomFactor
 
                 val expandedBounds = LatLngBounds.from(
                     coordinates.lat + expandedDelta, // North

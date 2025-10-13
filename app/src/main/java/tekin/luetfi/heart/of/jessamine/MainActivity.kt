@@ -13,11 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
+import tekin.luetfi.heart.of.jessamine.data.local.Place
 import tekin.luetfi.heart.of.jessamine.di.LocationPermissionFlow
 import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
+import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.ui.theme.JessamineTheme
 import tekin.luetfi.simple.map.hasLocationPermission
 import tekin.luetfi.simple.map.ui.DynamicBackground
@@ -41,7 +44,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             JessamineTheme {
                 val hasPermission by locationPermission.collectAsStateWithLifecycle()
-                DynamicBackground(modifier = Modifier, hasLocationPermission = hasPermission)
+                val echoesViewModel: EchoesViewModel = hiltViewModel()
+                val currentPlace: Place? by echoesViewModel.currentPlace.collectAsStateWithLifecycle(
+                    Place("", null))
+
+                DynamicBackground(
+                    modifier = Modifier,
+                    hasLocationPermission = hasPermission,
+                    focusedCoordinates = currentPlace?.coordinates
+                )
                 EchoesScreen(modifier = Modifier.fillMaxSize())
             }
         }
@@ -64,7 +75,7 @@ class MainActivity : ComponentActivity() {
 
 }
 
-fun Activity.requestLocationPermission(){
+fun Activity.requestLocationPermission() {
     if (hasLocationPermission.not()) {
         ActivityCompat.requestPermissions(
             this,
@@ -73,8 +84,6 @@ fun Activity.requestLocationPermission(){
         )
     }
 }
-
-
 
 
 @Preview(showBackground = true)

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.data.local.LocationLore
+import tekin.luetfi.heart.of.jessamine.data.local.Place
 import tekin.luetfi.heart.of.jessamine.data.remote.MediaWikiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.SpeechifyApi
@@ -38,7 +39,7 @@ class DefaultLocationInfoRepository(
         }
     }
 
-    private val _currentPlace = MutableStateFlow<String?>(null)
+    private val _currentPlace = MutableStateFlow<Place?>(null)
     override val currentPlace = _currentPlace.asStateFlow()
 
 
@@ -51,10 +52,23 @@ class DefaultLocationInfoRepository(
             e.printStackTrace()
             return LocationLore(emptyList())
         }
-        val firstPlace = geoQuery.query?.geoSearch?.random()
+        val firstPlace = try {
+            geoQuery.query?.geoSearch?.random()
+        } catch (e: Exception) {
+            null
+        }
         val placeName = firstPlace?.title ?: "Unknown Place"
 
-        _currentPlace.emit(placeName)
+        val selectedCoordinates: Coordinates? = try {
+            firstPlace ?: throw Exception("Unknown Place")
+            Coordinates(firstPlace.lat, firstPlace.lon)
+        }catch (e: Exception){
+            e.printStackTrace()
+            null
+        }
+        val place = Place(name = placeName, selectedCoordinates)
+
+        _currentPlace.emit(place)
 
         val messages = listOf(
             ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),
