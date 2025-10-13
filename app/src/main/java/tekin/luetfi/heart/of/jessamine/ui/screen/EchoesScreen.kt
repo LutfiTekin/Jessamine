@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import tekin.luetfi.heart.of.jessamine.R
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
+import tekin.luetfi.heart.of.jessamine.util.beatDurationMillis
 import kotlin.text.uppercase
 
 @Composable
@@ -42,7 +44,7 @@ fun EchoesScreen(modifier: Modifier){
     val speechMarks by viewModel.speechMarks.collectAsStateWithLifecycle()
     val playerRef = playbackViewModel.exoPlayer
     val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
-
+    val bytes by viewModel.bytesAccumulated.collectAsState()
 
     val initialState = remember(isMediaSectionActive,currentPlace) {
         isMediaSectionActive.not()
@@ -85,7 +87,9 @@ fun EchoesScreen(modifier: Modifier){
             }
 
             currentPlace?.name?.let { place ->
-                HeartbeatEffect(isPlaying.not()) { modifier ->
+                HeartbeatEffect(
+                    isBeating = isPlaying.not(),
+                    beatDurationMillis = bytes.beatDurationMillis) { modifier ->
                     Text(
                         modifier = modifier,
                         text = place.uppercase(),

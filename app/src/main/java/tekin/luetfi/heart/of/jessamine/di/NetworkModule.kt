@@ -11,10 +11,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tekin.luetfi.heart.of.jessamine.BuildConfig
+import tekin.luetfi.heart.of.jessamine.util.ByteAccumulationDispatcher
+import tekin.luetfi.heart.of.jessamine.util.ProgressResponseBody
 import tekin.luetfi.heart.of.jessamine.util.UserAgentInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -80,16 +83,39 @@ object NetworkModule {
     fun provideSpeechifyOkHTTPClient(
         @Named(LLM_TIMEOUT) defaultTimeOut: Long,
         loggingInterceptor: HttpLoggingInterceptor,
-        @SpeechifyAuth authInterceptor: Interceptor
+        @SpeechifyAuth authInterceptor: Interceptor,
+        downloadProgressInterceptor: DownloadProgressInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
             .writeTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
             .readTimeout(defaultTimeOut, TimeUnit.MILLISECONDS)
             .addNetworkInterceptor(UserAgentInterceptor())
+            .addNetworkInterceptor(downloadProgressInterceptor)
             .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
+
+    class DownloadProgressInterceptor(
+        private val byteDispatcher: ByteAccumulationDispatcher
+    ) : Interceptor {
+
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val originalResponse = chain.proceed(chain.request())
+            val body = originalResponse.body
+            return originalResponse.newBuilder()
+                .body(ProgressResponseBody(body) { bytesRead ->
+                    byteDispatcher.update(bytesRead)
+                })
+                .build()
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideDownloadProgressInterceptor(
+        dispatcher: ByteAccumulationDispatcher
+    ): DownloadProgressInterceptor = DownloadProgressInterceptor(dispatcher)
 
 
     @Provides

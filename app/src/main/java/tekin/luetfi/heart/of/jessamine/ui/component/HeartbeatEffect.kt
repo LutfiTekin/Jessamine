@@ -1,11 +1,14 @@
 package tekin.luetfi.heart.of.jessamine.ui.component
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -15,27 +18,37 @@ import tekin.luetfi.heart.of.jessamine.util.isCloseTo
 @Composable
 fun HeartbeatEffect(
     isBeating: Boolean,
+    beatDurationMillis: Int = 800,
     content: @Composable (Modifier) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
 
     val scale = if (isBeating) {
-        val infiniteTransition = rememberInfiniteTransition()
-        infiniteTransition.animateFloat(
-            initialValue = 1f,
-            targetValue = 1f, // loop back to base
-            animationSpec = infiniteRepeatable(
-                animation = keyframes {
-                    durationMillis = 800 // full heartbeat cycle
-                    1.0f at 0 // base
-                    1.3f at 100 // first thump
-                    1.0f at 200 // relax
-                    1.2f at 300 // second thump
-                    1.0f at 800 // full relax
-                },
-                repeatMode = RepeatMode.Restart
-            )
-        ).value
+        // Key: use a unique key to restart animation when beatDurationMillis changes
+        val transition = remember(beatDurationMillis) { Animatable(1f) }
+
+        LaunchedEffect(beatDurationMillis) {
+            while (true) {
+                transition.animateTo(
+                    targetValue = 1.3f,
+                    animationSpec = tween(beatDurationMillis / 8)
+                )
+                transition.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(beatDurationMillis / 8)
+                )
+                transition.animateTo(
+                    targetValue = 1.2f,
+                    animationSpec = tween(beatDurationMillis / 4)
+                )
+                transition.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(beatDurationMillis / 2)
+                )
+            }
+        }
+
+        transition.value
     } else {
         1f
     }

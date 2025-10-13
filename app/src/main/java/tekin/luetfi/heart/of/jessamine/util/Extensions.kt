@@ -23,3 +23,16 @@ class UserAgentInterceptor(private val userAgent: String = BuildConfig.APP_USER_
 fun Float.isCloseTo(target: Float, tolerance: Float = 0.01f): Boolean {
     return kotlin.math.abs(this - target) < tolerance
 }
+
+val Long.beatDurationMillis: Int
+    get() {
+        val maxBytes = 2_097_152L // 2MB
+        val stepCount = 10
+        val stepSize = 60 // ms per step → 800 → 200
+
+        val progress = (this.toFloat() / maxBytes).coerceIn(0f, 1f)
+        val stepIndex = (progress * stepCount).toInt().coerceIn(0, stepCount - 1)
+
+        return 800 - (stepIndex * stepSize)
+    }
+
