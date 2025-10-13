@@ -59,41 +59,4 @@ data class ChatCompletionResponse(
         }.getOrNull()
     }
 
-
-// ───────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ───────────────────────────────────────────────────────────────────────────────
-
-    /** Removes surrounding ```json ... ``` or ``` ... ``` fences if present. */
-    private fun String.stripCodeFences(): String {
-        val trimmed = trim()
-        val fenceRegex = Regex("""^```(?:json)?\s*([\s\S]*?)\s*```$""", RegexOption.IGNORE_CASE)
-        val m = fenceRegex.find(trimmed)
-        return if (m != null) m.groupValues[1].trim() else trimmed
-    }
-
-    /**
-     * Returns the first balanced {...} block found. This is resilient to
-     * accidental prose around the JSON.
-     */
-    private fun String.extractFirstJsonObject(): String? {
-        var depth = 0
-        var start = -1
-        for (i in indices) {
-            when (this[i]) {
-                '{' -> {
-                    if (depth == 0) start = i
-                    depth++
-                }
-                '}' -> {
-                    if (depth > 0) depth--
-                    if (depth == 0 && start != -1) {
-                        return substring(start, i + 1)
-                    }
-                }
-            }
-        }
-        return null
-    }
-
 }

@@ -83,7 +83,6 @@ class PlaybackViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Handle error - you can expose this via StateFlow if needed
             }
         }
     }
