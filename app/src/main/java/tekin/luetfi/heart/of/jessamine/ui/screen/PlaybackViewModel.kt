@@ -31,6 +31,11 @@ class PlaybackViewModel @Inject constructor(
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     _isPlaying.value = playbackState == Player.STATE_READY && playWhenReady
+                    if (playbackState == Player.STATE_READY){
+                        _isMediaSessionActive.value = true
+                    }else if (playbackState == Player.STATE_ENDED){
+                        _isMediaSessionActive.value = false
+                    }
                 }
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -42,6 +47,10 @@ class PlaybackViewModel @Inject constructor(
 
     val exoPlayer: ExoPlayer
         get() = _exoPlayer
+
+    private val _isMediaSessionActive = MutableStateFlow<Boolean>(false)
+    val isMediaSessionActive: StateFlow<Boolean> = _isMediaSessionActive
+
 
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying
