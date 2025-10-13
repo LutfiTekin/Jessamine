@@ -102,7 +102,8 @@ fun EchoesScreen(modifier: Modifier){
                     .padding(24.dp)
                     .align(Alignment.Center),
                 text = initialScreenText(),
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center)
         }
         Box(

@@ -9,7 +9,8 @@ import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
 import tekin.luetfi.heart.of.jessamine.R
 
-/*val playfairDisplayFont = GoogleFont("Playfair Display")
+val playfairDisplayFont = GoogleFont("Playfair Display")
+val oswaldFont = GoogleFont("Oswald")
 
 val fontProvider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -17,20 +18,19 @@ val fontProvider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs // Add this resource in your project (see note below)
 )
 
+
 val defaultFont = FontFamily(
     Font(
-        googleFont = playfairDisplayFont,
+        googleFont = oswaldFont,
         fontProvider = fontProvider,
         weight = FontWeight.Normal
     ),
     Font(
-        googleFont = playfairDisplayFont,
+        googleFont = oswaldFont,
         fontProvider = fontProvider,
         weight = FontWeight.Bold
     )
-)*/
-
-        val defaultFont = FontFamily.Serif
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
