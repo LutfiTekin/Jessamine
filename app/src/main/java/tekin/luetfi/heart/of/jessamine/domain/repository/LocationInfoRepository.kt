@@ -15,5 +15,7 @@ interface LocationInfoRepository {
 
     val currentPlace : Flow<Place?>
 
-    suspend fun getLocationLore(coordinates: Coordinates): LocationLore
+    suspend fun getLocationLore(coordinates: Coordinates)
+
+    fun resetPlace()
 }

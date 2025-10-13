@@ -25,9 +25,6 @@ class EchoesViewModel @Inject constructor(
 
     val currentCoordinates = locationFlow
 
-    private val _locationLore = MutableStateFlow(LocationLore())
-    val locationLore: StateFlow<LocationLore> = _locationLore
-
     val currentPlace: Flow<Place?> = locationInfoRepository.currentPlace
 
     val audioData: StateFlow<String?> = locationInfoRepository.speechData.map { it?.audioData }.stateIn(
@@ -52,11 +49,10 @@ class EchoesViewModel @Inject constructor(
 
     fun getLocationLore(coordinates: Coordinates) {
         viewModelScope.launch {
-            locationInfoRepository.getLocationLore(coordinates).runCatching {
-                _locationLore.emit(this)
-            }
-
+            locationInfoRepository.getLocationLore(coordinates)
         }
     }
+
+    fun resetPlace() = locationInfoRepository.resetPlace()
 
 }

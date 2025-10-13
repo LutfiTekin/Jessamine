@@ -42,15 +42,19 @@ class DefaultLocationInfoRepository(
     private val _currentPlace = MutableStateFlow<Place?>(null)
     override val currentPlace = _currentPlace.asStateFlow()
 
+    override fun resetPlace(){
+        _currentPlace.value = null
+    }
 
-    override suspend fun getLocationLore(coordinates: Coordinates): LocationLore {
+
+    override suspend fun getLocationLore(coordinates: Coordinates) {
         val geoSearchString = coordinates.geoSearchString
         //Get geo location info
         val geoQuery = try {
             mediaWikiApi.geoSearch(geoSearchCoordinates = geoSearchString, radius = 1000)
         } catch (e: Exception) {
             e.printStackTrace()
-            return LocationLore(emptyList())
+            return
         }
         val firstPlace = try {
             geoQuery.query?.geoSearch?.random()
@@ -83,7 +87,7 @@ class DefaultLocationInfoRepository(
         )
 
         try {
-            return openRouterApi.getChatCompletion(request).parseResponseOrNull<LocationLore>(moshi)
+            openRouterApi.getChatCompletion(request).parseResponseOrNull<LocationLore>(moshi)
                 ?.also {
                     withContext(Dispatchers.IO) {
                         launch {
@@ -95,7 +99,5 @@ class DefaultLocationInfoRepository(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        return LocationLore(emptyList())
     }
 }

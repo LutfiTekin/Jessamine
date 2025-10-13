@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.exoplayer.ExoPlayer
+import kotlinx.coroutines.delay
 import tekin.luetfi.heart.of.jessamine.R
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
@@ -56,6 +57,13 @@ fun EchoesScreen(modifier: Modifier){
                 && currentPlace == null
     }
 
+    LaunchedEffect(isMediaSectionActive) {
+        if (isMediaSectionActive || initialState)
+            return@LaunchedEffect
+        delay(2000L)
+        playbackViewModel.exoPlayer.clearMediaItems()
+        viewModel.resetPlace()
+    }
 
 
 
