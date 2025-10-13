@@ -8,10 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -27,11 +29,14 @@ fun SpeechHighlighter(
     player: ExoPlayer,
     speechMarks: List<Triple<Long, Long, String>>
 ) {
-    var currentWordIndex by remember { mutableIntStateOf(0) }
+    var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
+
+    val configuration = LocalConfiguration.current
 
     val haptic = LocalHapticFeedback.current
 
-    LaunchedEffect(player) {
+    LaunchedEffect(player, configuration) {
+        currentWordIndex = -1 //reset
         while (true) {
             val position = player.currentPosition
             val index = speechMarks.indexOfLast { position in it.first..it.second }

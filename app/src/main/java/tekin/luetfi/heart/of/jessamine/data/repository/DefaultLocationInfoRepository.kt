@@ -32,7 +32,7 @@ class DefaultLocationInfoRepository(
 
     suspend fun synthesizeWhispers(lore: LocationLore){
         lore.whispersString
-        speechifyApi.synthesize(SpeechRequest(lore.whispersString)).runCatching {
+        speechifyApi.synthesize(SpeechRequest(lore.whispersString.replace("\n", " "))).runCatching {
             _speechData.emit(this)
         }
     }
@@ -59,7 +59,8 @@ class DefaultLocationInfoRepository(
         val request = ChatRequest(
             messages = messages,
             responseFormat = ResponseFormat("json_object"),
-            model = "meta-llama/llama-3.3-8b-instruct:free"
+            model = "google/gemini-2.0-flash-001"
+            //model = "meta-llama/llama-3.3-8b-instruct:free"
         )
 
         try {

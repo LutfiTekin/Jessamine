@@ -66,8 +66,8 @@ suspend fun Context.getUserLocationCurrent(
 
 @SuppressLint("MissingPermission")
 fun Context.currentLocation(
-    intervalMillis: Long = 5_000L,
-    minUpdateIntervalMillis: Long = 2_000L,
+    intervalMillis: Long = 10_000L,
+    minUpdateIntervalMillis: Long = 52_000L,
     minUpdateDistanceMeters: Float = 0f,
     priority: Int = Priority.PRIORITY_HIGH_ACCURACY
 ): Flow<Coordinates> = callbackFlow {

@@ -1,0 +1,89 @@
+package tekin.luetfi.heart.of.jessamine.ui.screen
+
+import android.app.Application
+import android.net.Uri
+import android.util.Base64
+import androidx.annotation.OptIn
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.media3.common.AuxEffectInfo
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.ByteArrayDataSource
+import androidx.media3.datasource.DataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import tekin.luetfi.heart.of.jessamine.util.environmentalReverb
+import javax.inject.Inject
+
+@HiltViewModel
+class PlaybackViewModel @Inject constructor(
+    private val app: Application
+): AndroidViewModel(app) {
+
+    private val _exoPlayer: ExoPlayer by lazy {
+        ExoPlayer.Builder(app).build().apply {
+            addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    _isPlaying.value = playbackState == Player.STATE_READY && playWhenReady
+                }
+
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    _isPlaying.value = isPlaying
+                }
+            })
+        }
+    }
+
+    val exoPlayer: ExoPlayer
+        get() = _exoPlayer
+
+    private val _isPlaying = MutableStateFlow(false)
+    val isPlaying: StateFlow<Boolean> = _isPlaying
+
+
+
+    @OptIn(UnstableApi::class)
+    fun playAudio(audioData: String) {
+        viewModelScope.launch {
+            try {
+                val audioBytes = Base64.decode(audioData, Base64.DEFAULT)
+
+
+                // Create ByteArrayDataSource with the decoded audio
+                val byteArrayDataSource = ByteArrayDataSource(audioBytes)
+
+                // Create DataSource.Factory that returns the ByteArrayDataSource
+                val dataSourceFactory = DataSource.Factory { byteArrayDataSource }
+
+                // Create ProgressiveMediaSource using the factory
+                val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(MediaItem.fromUri(Uri.EMPTY))
+
+                exoPlayer.apply {
+                    setMediaSource(mediaSource)
+                    prepare()
+                    playWhenReady = true
+                    setAuxEffectInfo(AuxEffectInfo(environmentalReverb().id, 1.0f))
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Handle error - you can expose this via StateFlow if needed
+            }
+        }
+    }
+
+
+
+
+    override fun onCleared() {
+        super.onCleared()
+        _exoPlayer.release()
+    }
+}

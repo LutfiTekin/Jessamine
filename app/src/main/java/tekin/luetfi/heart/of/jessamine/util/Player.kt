@@ -43,7 +43,7 @@ fun playWithExoPlayer(response: SpeechResponse, context: Context): ExoPlayer {
 }
 
 @OptIn(UnstableApi::class)
-private fun ExoPlayer.environmentalReverb(): EnvironmentalReverb {
+fun ExoPlayer.environmentalReverb(): EnvironmentalReverb {
     val environmentalReverb = EnvironmentalReverb(1, audioSessionId)
 
     environmentalReverb.apply {

@@ -77,7 +77,7 @@ fun SimpleCityMap(
 
                 // Calculate bounds based on the given coordinate with 2x area
                 val baseDelta = 0.01 // Base delta for the area around the coordinate
-                val expandedDelta = baseDelta * 2 // 2x expansion
+                val expandedDelta = baseDelta * 1.25 // 2x expansion
 
                 val expandedBounds = LatLngBounds.from(
                     coordinates.lat + expandedDelta, // North
