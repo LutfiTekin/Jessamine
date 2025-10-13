@@ -44,6 +44,11 @@ val String.ssmlText: String
             append("<speak>")
             append("<speechify:style emotion=\"fearful\">")
             lines.forEachIndexed { index, line ->
+                if (index == lines.size - 1){
+                    append("<break time=\"1500ms\"/>")
+                }else if (index > 0) {
+                    append("<break time=\"250ms\"/>")
+                }
                 append(line.trim()) // Append trimmed line content
             }
             append("</speechify:style>")
