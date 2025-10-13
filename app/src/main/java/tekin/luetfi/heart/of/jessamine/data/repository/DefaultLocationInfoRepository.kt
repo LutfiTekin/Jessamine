@@ -51,7 +51,7 @@ class DefaultLocationInfoRepository(
         val geoSearchString = coordinates.geoSearchString
         //Get geo location info
         val geoQuery = try {
-            mediaWikiApi.geoSearch(geoSearchCoordinates = geoSearchString, radius = 1000)
+            mediaWikiApi.geoSearch(geoSearchCoordinates = geoSearchString, radius = 1400)
         } catch (e: Exception) {
             e.printStackTrace()
             return
