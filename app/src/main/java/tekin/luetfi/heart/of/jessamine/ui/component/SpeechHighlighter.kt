@@ -11,6 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +29,8 @@ fun SpeechHighlighter(
 ) {
     var currentWordIndex by remember { mutableIntStateOf(0) }
 
+    val haptic = LocalHapticFeedback.current
+
     LaunchedEffect(player) {
         while (true) {
             val position = player.currentPosition
@@ -36,6 +40,12 @@ fun SpeechHighlighter(
             }
             delay(16) // Update animation every frame
         }
+    }
+
+    LaunchedEffect(currentWordIndex) {
+        if (currentWordIndex < 1)
+            return@LaunchedEffect
+        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
     }
 
     // Render with highlighting
