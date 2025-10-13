@@ -44,6 +44,11 @@ data class ChatCompletionResponse(
             ?.message?.content
             ?: return null
 
+        if (T::class == String::class) {
+            @Suppress("UNCHECKED_CAST")
+            return content as T
+        }
+
         val json = content
             .cleanupCodeFences()
             .getFirstJsonObject()

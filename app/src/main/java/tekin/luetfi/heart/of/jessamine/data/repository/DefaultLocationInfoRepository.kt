@@ -20,6 +20,7 @@ import tekin.luetfi.heart.of.jessamine.domain.model.SpeechResponse
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
 import tekin.luetfi.heart.of.jessamine.util.WHISPER_SYSTEM_PROMPT
 import tekin.luetfi.heart.of.jessamine.util.geoSearchString
+import tekin.luetfi.heart.of.jessamine.util.ssmlText
 import tekin.luetfi.simple.map.data.model.Coordinates
 
 class DefaultLocationInfoRepository(
@@ -32,9 +33,8 @@ class DefaultLocationInfoRepository(
     private val _speechData = MutableStateFlow<SpeechResponse?>(null)
     override val speechData = _speechData.asStateFlow()
 
-    suspend fun synthesizeWhispers(lore: LocationLore){
-        lore.whispersString
-        speechifyApi.synthesize(SpeechRequest(lore.whispersString.replace("\n", " "))).runCatching {
+    suspend fun synthesizeWhispers(lore: String){
+        speechifyApi.synthesize(SpeechRequest(lore.ssmlText)).runCatching {
             _speechData.emit(this)
         }
     }
@@ -87,7 +87,7 @@ class DefaultLocationInfoRepository(
         )
 
         try {
-            openRouterApi.getChatCompletion(request).parseResponseOrNull<LocationLore>(moshi)
+            openRouterApi.getChatCompletion(request).parseResponseOrNull<String>(moshi)
                 ?.also {
                     withContext(Dispatchers.IO) {
                         launch {

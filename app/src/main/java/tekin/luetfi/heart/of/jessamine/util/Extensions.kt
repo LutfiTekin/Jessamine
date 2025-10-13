@@ -36,3 +36,18 @@ val Long.beatDurationMillis: Int
         return 800 - (stepIndex * stepSize)
     }
 
+
+val String.ssmlText: String
+    get() {
+        val lines = split("\n") // Split lore into lines
+        return buildString {
+            append("<speak>")
+            lines.forEachIndexed { index, line ->
+                if (index > 0) {
+                    append("<break time=\"250ms\"/>") // Insert 1-second pause before each line after the first
+                }
+                append(line.trim()) // Append trimmed line content
+            }
+            append("</speak>")
+        }
+    }
