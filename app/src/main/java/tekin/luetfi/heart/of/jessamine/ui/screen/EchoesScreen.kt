@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -101,8 +102,8 @@ fun EchoesScreen(modifier: Modifier){
                     .padding(24.dp)
                     .align(Alignment.Center),
                 text = initialScreenText(),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.SemiBold)
+                style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center)
         }
         Box(
             modifier = Modifier

@@ -57,6 +57,7 @@ fun SpeechHighlighter(
     Text(
         modifier = modifier,
         textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.bodyMedium,
         text =
         buildAnnotatedString {
             speechMarks.forEachIndexed { idx, (_, _, word) ->
