@@ -58,11 +58,16 @@ fun SimpleCityMap(
         MapView(context).apply { onCreate(null) }
     }
 
+    var mapSettling by remember { mutableStateOf(false) }
+
+
     if(focused){
         val azimuth: Double = rememberAzimuth()
         val azimuthKey = remember(azimuth) { (azimuth * 10).roundToInt() / 10.0 } // Delta of 0.1 degrees
         LaunchedEffect(azimuthKey, mapInstance) {
             val map = mapInstance ?: return@LaunchedEffect
+            //New position is selected prevent bearing updates
+            if (mapSettling) return@LaunchedEffect
             val currentPosition = map.cameraPosition
 
             val newCameraPosition = CameraPosition.Builder()
@@ -104,6 +109,7 @@ fun SimpleCityMap(
         }
     ) { mv ->
         mv.getMapAsync { map ->
+            mapInstance = map
             map.setStyle(BuildConfig.MAP_STYLE) {
 
                 if (!userInteractionEnabled) {
@@ -142,9 +148,10 @@ fun SimpleCityMap(
                     ),
                     MAP_ANIMATION_DURATION // animation duration in ms
                 )
+                mapSettling = true
                 scope.launch {
                     delay(MAP_ANIMATION_DURATION + 100L)
-                    mapInstance = map
+                    mapSettling = false
                 }
             }
         }
