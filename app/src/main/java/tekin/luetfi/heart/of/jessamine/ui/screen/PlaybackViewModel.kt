@@ -18,7 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import tekin.luetfi.heart.of.jessamine.util.environmentalReverb
+import tekin.luetfi.heart.of.jessamine.util.environmentalReverbStereo
 import javax.inject.Inject
 
 @HiltViewModel
@@ -78,7 +78,7 @@ class PlaybackViewModel @Inject constructor(
                     setMediaSource(mediaSource)
                     prepare()
                     playWhenReady = true
-                    setAuxEffectInfo(AuxEffectInfo(environmentalReverb().id, 1.0f))
+                    setAuxEffectInfo(AuxEffectInfo(environmentalReverbStereo().id, 1.0f))
                 }
 
             } catch (e: Exception) {
