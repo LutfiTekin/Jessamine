@@ -42,12 +42,11 @@ val String.ssmlText: String
         val lines = split("\n") // Split lore into lines
         return buildString {
             append("<speak>")
+            append("<speechify:style emotion=\"fearful\">")
             lines.forEachIndexed { index, line ->
-                if (index > 0) {
-                    append("<break time=\"250ms\"/>") // Insert 1-second pause before each line after the first
-                }
                 append(line.trim()) // Append trimmed line content
             }
+            append("</speechify:style>")
             append("</speak>")
         }
     }
