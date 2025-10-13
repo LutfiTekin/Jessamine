@@ -8,34 +8,26 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.media3.exoplayer.ExoPlayer
 import kotlinx.coroutines.delay
 import tekin.luetfi.heart.of.jessamine.R
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
+import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
+import kotlin.text.uppercase
 
 @Composable
 fun EchoesScreen(modifier: Modifier){
@@ -91,11 +83,14 @@ fun EchoesScreen(modifier: Modifier){
                     speechMarks = speechMarks)
             }
 
-            currentPlace?.name?.let {
-                Text(
-                    text = it.uppercase(),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold)
+            currentPlace?.name?.let { place ->
+                HeartbeatEffect(isPlaying.not()) { modifier ->
+                    Text(
+                        modifier = modifier,
+                        text = place.uppercase(),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold)
+                }
             }
 
         }

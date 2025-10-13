@@ -19,3 +19,7 @@ class UserAgentInterceptor(private val userAgent: String = BuildConfig.APP_USER_
         return chain.proceed(requestWithUserAgent)
     }
 }
+
+fun Float.isCloseTo(target: Float, tolerance: Float = 0.01f): Boolean {
+    return kotlin.math.abs(this - target) < tolerance
+}
