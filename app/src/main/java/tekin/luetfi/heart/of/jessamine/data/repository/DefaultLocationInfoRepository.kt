@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tekin.luetfi.heart.of.jessamine.data.local.LocationLore
 import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.data.remote.MediaWikiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
@@ -18,7 +17,9 @@ import tekin.luetfi.heart.of.jessamine.domain.model.ResponseFormat
 import tekin.luetfi.heart.of.jessamine.domain.model.SpeechRequest
 import tekin.luetfi.heart.of.jessamine.domain.model.SpeechResponse
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
+import tekin.luetfi.heart.of.jessamine.ui.component.Confirmation
 import tekin.luetfi.heart.of.jessamine.util.WHISPER_SYSTEM_PROMPT
+import tekin.luetfi.heart.of.jessamine.util.fallbackPlaces
 import tekin.luetfi.heart.of.jessamine.util.geoSearchString
 import tekin.luetfi.heart.of.jessamine.util.ssmlText
 import tekin.luetfi.simple.map.data.model.Coordinates
@@ -33,7 +34,7 @@ class DefaultLocationInfoRepository(
     private val _speechData = MutableStateFlow<SpeechResponse?>(null)
     override val speechData = _speechData.asStateFlow()
 
-    suspend fun synthesizeWhispers(lore: String){
+    suspend fun synthesizeWhispers(lore: String) {
         speechifyApi.synthesize(SpeechRequest(lore.ssmlText)).runCatching {
             _speechData.emit(this)
         }
@@ -42,7 +43,7 @@ class DefaultLocationInfoRepository(
     private val _currentPlace = MutableStateFlow<Place?>(null)
     override val currentPlace = _currentPlace.asStateFlow()
 
-    override fun resetPlace(){
+    override fun resetPlace() {
         _currentPlace.value = null
     }
 
@@ -56,23 +57,35 @@ class DefaultLocationInfoRepository(
             e.printStackTrace()
             return
         }
-        val firstPlace = try {
+        val selectedPlace = try {
             geoQuery.query?.geoSearch?.random()
         } catch (e: Exception) {
             null
         }
-        val placeName = firstPlace?.title ?: "Unknown Place"
+        val placeName = selectedPlace?.title ?: "Unknown Place"
 
         val selectedCoordinates: Coordinates? = try {
-            firstPlace ?: throw Exception("Unknown Place")
-            Coordinates(firstPlace.lat, firstPlace.lon)
-        }catch (e: Exception){
+            selectedPlace ?: throw Exception("Unknown Place")
+            Coordinates(selectedPlace.lat, selectedPlace.lon)
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
-        val place = Place(name = placeName, selectedCoordinates)
+
+        val confirmation = Confirmation(
+            finalText = placeName,
+            items = geoQuery.query?.geoSearch.orEmpty()
+                .map {
+                    it.title
+                } + fallbackPlaces)
+
+        val place = Place(
+            name = placeName,
+            coordinates = selectedCoordinates,
+            confirmation = confirmation)
 
         _currentPlace.emit(place)
+
 
         val messages = listOf(
             ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),

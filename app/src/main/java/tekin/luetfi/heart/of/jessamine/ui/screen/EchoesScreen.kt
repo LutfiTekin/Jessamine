@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +28,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import tekin.luetfi.heart.of.jessamine.R
+import tekin.luetfi.heart.of.jessamine.ui.component.AnimatedConfirmation
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
@@ -86,17 +89,27 @@ fun EchoesScreen(modifier: Modifier){
                     speechMarks = speechMarks)
             }
 
-            currentPlace?.name?.let { place ->
-                HeartbeatEffect(
-                    isBeating = isPlaying.not(),
-                    beatDurationMillis = bytes.beatDurationMillis) { modifier ->
-                    Text(
-                        modifier = modifier,
-                        text = place.uppercase(),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center)
+            currentPlace?.let { place ->
+                var placeNameSettled by remember(place) { mutableStateOf(false) }
+                if (placeNameSettled) {
+                    HeartbeatEffect(
+                        isBeating = isPlaying.not(),
+                        beatDurationMillis = bytes.beatDurationMillis) { modifier ->
+                        Text(
+                            modifier = modifier,
+                            text = place.name.uppercase(),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center)
+                    }
+                }else {
+                    AnimatedConfirmation(
+                        modifier = Modifier,
+                        confirmation = place.confirmation,
+                        onAnimationEnd = {
+                            placeNameSettled = true
+                        })
                 }
             }
 

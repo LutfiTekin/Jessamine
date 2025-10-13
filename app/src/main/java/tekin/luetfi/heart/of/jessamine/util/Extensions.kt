@@ -51,3 +51,25 @@ val String.ssmlText: String
             append("</speak>")
         }
     }
+
+val fallbackPlaces = listOf(
+    "Old Watchtower",
+    "Stone Bridge",
+    "North Windmill",
+    "Abandoned Depot",
+    "Hilltop Chapel",
+    "Abandoned Station",
+    "South Pier",
+    "The Iron Gate",
+    "Cobbler’s Alley",
+    "The Weathered Arch",
+    "Foggy Crossing",
+    "The Broken Stair",
+    "East Reservoir",
+    "The Quiet Courtyard",
+    "Sunken Garden",
+    "The Rusted Rail",
+    "West Bell Tower",
+    "The Forgotten Tunnel"
+)
+
