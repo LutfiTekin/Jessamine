@@ -82,7 +82,8 @@ class DefaultLocationInfoRepository(
         val place = Place(
             name = placeName,
             coordinates = selectedCoordinates,
-            confirmation = confirmation)
+            confirmation = confirmation
+        )
 
         _currentPlace.emit(place)
 
@@ -100,15 +101,11 @@ class DefaultLocationInfoRepository(
         )
 
         try {
-            openRouterApi.getChatCompletion(request).parseResponseOrNull<String>(moshi)
-                ?.also {
-                    withContext(Dispatchers.IO) {
-                        launch {
-                            synthesizeWhispers(it)
-                        }
-                    }
-                }
+            val lore = openRouterApi
+                .getChatCompletion(request)
+                .parseResponseOrNull<String>(moshi)
                 ?: throw Exception()
+            synthesizeWhispers(lore)
         } catch (e: Exception) {
             e.printStackTrace()
         }
