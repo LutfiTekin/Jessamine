@@ -13,11 +13,6 @@
 - [Google Fonts for Compose](https://developer.android.com/jetpack/compose/text/fonts)
 - [AppCompat & Material Components](https://developer.android.com/jetpack/androidx/releases/appcompat)
 
-### Navigation
-- [Navigation Compose](https://developer.android.com/jetpack/compose/navigation)
-- [Navigation Fragment & UI KTX](https://developer.android.com/jetpack/androidx/releases/navigation)
-- [Hilt Navigation Compose](https://developer.android.com/training/dependency-injection/hilt-android#compose)
-
 ### Dependency Injection
 - [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 
