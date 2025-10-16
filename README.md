@@ -19,7 +19,7 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 
 ![Home Screen – Garden of the Fugitives](docs/images/home_screen_garden_of_the_fugitives.png)
 
-![Home Screen – Location: Pisa](docs/images/images/home_screen_location_pisa.png)
+![Home Screen – Location: Pisa](https://lutfitekin.github.io/Jessamine/images/home_screen_location_pisa.png)
 
 ---
 
