@@ -75,3 +75,29 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 
 ### Asynchronous & Background Tasks
 - [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+
+---
+
+## How to Run
+
+To run the app locally, you’ll need to configure your API keys for voice and language generation.
+
+### 1. Configure `local.properties`
+
+Copy the provided `local.properties.example` file and rename it to `local.properties` in the root of your project. Then, add your API keys:
+
+SPEECHIFY_API_KEY=YOUR_SPEECHIFY_API_KEY 
+OPENROUTERAI_API_KEY=YOUR_OPENROUTERAI_API_KEY
+
+These keys are required for:
+- **Speechify**: Text-to-speech narration
+- **OpenRouterAI**: Generating location-based lore using an LLM
+
+> ⚠️ Do not commit your `local.properties` file to version control. It contains sensitive credentials.
+
+### 2. Build & Run
+
+You can now build and run the app using Android Studio or the command line:
+
+```bash
+./gradlew installDebug
