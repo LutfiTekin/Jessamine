@@ -87,6 +87,7 @@ To run the app locally, you’ll need to configure your API keys for voice and l
 Copy the provided `local.properties.example` file and rename it to `local.properties` in the root of your project. Then, add your API keys:
 
 SPEECHIFY_API_KEY=YOUR_SPEECHIFY_API_KEY 
+
 OPENROUTERAI_API_KEY=YOUR_OPENROUTERAI_API_KEY
 
 These keys are required for:
