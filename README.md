@@ -1,3 +1,45 @@
+## Description
+
+This Android app reimagines the iconic "Heart" from *Dishonored* as a real-world artifact. By using your device's location, it identifies the nearest landmark and channels a haunting, poetic narrative about that place-generated in real time using a large language model.
+Built with Jetpack Compose, Hilt, and MapLibre, the app emphasizes gesture-driven interaction, atmospheric storytelling, and modular architecture for future expansion.
+
+---
+
+## Story
+
+Inspired by the eerie intimacy of the Heart in *[Dishonored](https://en.wikipedia.org/wiki/Dishonored)*, this fun side project explores what it means to listen to a place.
+
+In the opening of the 2012 action-adventure game *Dishonored*, Corvo Attano is offered a [mechanical heart](https://www.rockpapershotgun.com/the-gaming-pulse-on-dishonoreds-heart#more-135985) that helps him locate in-game artifacts such as *runes* and *bone charms*. But it has one more feature: when squeezed, it whispers stories about nearby locations and people.
+So with that mechanic in mind, I developed an app that attempts to replicate its behavior in the real world. The UX is intentionally minimal, just tap anywhere on the screen, and the app works its magic to uncover the "lore" of the surrounding place.
+
+---
+
+## Preview
+
+
+![Home Screen – Garden of the Fugitives](docs/images/home_screen_garden_of_the_fugitives.png)
+
+![Home Screen – Location: Pisa](docs/images/Jessamine/images/home_screen_location_pisa.png)
+
+---
+
+## APIs Used
+
+- **[Google Play Services Location](https://developer.android.com/training/location)**  
+  For retrieving the device’s current location with high accuracy.
+
+- **[Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page)**  
+  Used to fetch the nearest landmark or place of interest based on coordinates.
+
+- **[OpenAI API](https://platform.openai.com/docs)** or compatible LLM endpoint  
+  Generates atmospheric, lore-rich descriptions of the nearby location.
+
+- **[MapLibre GL Android SDK](https://maplibre.org/projects/maplibre-gl-native/)**  
+  Provides offline-friendly, customizable map rendering for visual
+  
+- **[Speechify API](https://speechify.com/developers/)**  
+  Converts generated text into immersive, high-quality voice narration for in-app playback.
+
 ## Tech Stack
 
 ### Core Frameworks & Language
