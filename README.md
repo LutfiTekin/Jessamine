@@ -46,6 +46,10 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 - **[Speechify API](https://speechify.com/developers/)**  
   Converts generated text into immersive, high-quality voice narration for in-app playback.
 
+> ⚠️ **Note:** For production environments, you should avoid storing API keys (e.g., Speechify or OpenRouter) in `local.properties`. Even if excluded from version control, these keys are still visible in the compiled APK.  
+> Instead, consider using a secure backend service or Firebase Cloud Functions to proxy sensitive requests.  
+> This project uses local keys only for demo and proof-of-concept purposes.
+
 ## Tech Stack
 
 ### Core Frameworks & Language
