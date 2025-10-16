@@ -17,9 +17,11 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 ## Preview
 
 
-![Home Screen – Garden of the Fugitives](docs/images/home_screen_garden_of_the_fugitives.png)
-
-![Home Screen – Location: Pisa](https://lutfitekin.github.io/Jessamine/images/home_screen_location_pisa.png)
+<div style="display: flex; justify-content: space-between;">
+  <img src="docs/images/home_screen.png" width="30%" alt="Home Screen"/>
+  <img src="docs/images/home_screen_garden_of_the_fugitives.png" width="30%" alt="Garden of the Fugitives"/>
+  <img src="docs/images/home_screen_location_pisa.png" width="30%" alt="Location: Pisa"/>
+</div>
 
 ---
 
