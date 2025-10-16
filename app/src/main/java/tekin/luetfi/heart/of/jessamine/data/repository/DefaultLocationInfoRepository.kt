@@ -2,6 +2,7 @@ package tekin.luetfi.heart.of.jessamine.data.repository
 
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,7 @@ import tekin.luetfi.heart.of.jessamine.util.fallbackPlaces
 import tekin.luetfi.heart.of.jessamine.util.geoSearchString
 import tekin.luetfi.heart.of.jessamine.util.ssmlText
 import tekin.luetfi.simple.map.data.model.Coordinates
+import kotlin.coroutines.coroutineContext
 
 class DefaultLocationInfoRepository(
     private val openRouterApi: OpenRouterAiApi,
@@ -43,7 +45,8 @@ class DefaultLocationInfoRepository(
     private val _currentPlace = MutableStateFlow<Place?>(null)
     override val currentPlace = _currentPlace.asStateFlow()
 
-    override fun resetPlace() {
+    override fun reset() {
+        _speechData.value = null
         _currentPlace.value = null
     }
 
@@ -57,6 +60,7 @@ class DefaultLocationInfoRepository(
             e.printStackTrace()
             return
         }
+        coroutineContext.ensureActive()
         val selectedPlace = try {
             geoQuery.query?.geoSearch?.random()
         } catch (e: Exception) {
@@ -87,7 +91,6 @@ class DefaultLocationInfoRepository(
 
         _currentPlace.emit(place)
 
-
         val messages = listOf(
             ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),
             ChatMessage(role = "user", content = placeName)
@@ -105,6 +108,7 @@ class DefaultLocationInfoRepository(
                 .getChatCompletion(request)
                 .parseResponseOrNull<String>(moshi)
                 ?: throw Exception()
+            coroutineContext.ensureActive()
             synthesizeWhispers(lore)
         } catch (e: Exception) {
             e.printStackTrace()

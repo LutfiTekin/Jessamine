@@ -13,5 +13,5 @@ interface LocationInfoRepository {
 
     suspend fun getLocationLore(coordinates: Coordinates)
 
-    fun resetPlace()
+    fun reset()
 }

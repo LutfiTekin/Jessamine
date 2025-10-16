@@ -3,6 +3,8 @@ package tekin.luetfi.heart.of.jessamine.ui.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +31,8 @@ class EchoesViewModel @Inject constructor(
 
     val bytesAccumulated: StateFlow<Long> = byteDispatcher.bytesAccumulated
 
+    var loreJob: Job? = null
+
     val audioData: StateFlow<String?> = locationInfoRepository.speechData.map { it?.audioData }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -51,10 +55,19 @@ class EchoesViewModel @Inject constructor(
 
     fun getLocationLore(coordinates: Coordinates) {
         viewModelScope.launch {
-            locationInfoRepository.getLocationLore(coordinates)
+            loreJob?.cancelAndJoin()
+            loreJob = launch { locationInfoRepository.getLocationLore(coordinates) }
         }
     }
 
-    fun resetPlace() = locationInfoRepository.resetPlace()
+    fun reset() {
+        locationInfoRepository.reset()
+        loreJob?.cancel()
+    }
+
+    override fun onCleared() {
+        reset()
+        super.onCleared()
+    }
 
 }

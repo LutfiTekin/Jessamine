@@ -88,6 +88,10 @@ class PlaybackViewModel @Inject constructor(
     }
 
 
+    fun clearPlayer(){
+        _exoPlayer.stop()
+        _exoPlayer.release()
+    }
 
 
     override fun onCleared() {

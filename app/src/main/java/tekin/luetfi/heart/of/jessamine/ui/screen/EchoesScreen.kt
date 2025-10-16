@@ -1,5 +1,7 @@
 package tekin.luetfi.heart.of.jessamine.ui.screen
 
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,6 +51,7 @@ fun EchoesScreen(modifier: Modifier){
     val playerRef = playbackViewModel.exoPlayer
     val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
     val bytes by viewModel.bytesAccumulated.collectAsState()
+    val activity = LocalActivity.current
 
     val initialState = remember(isMediaSectionActive,currentPlace) {
         isMediaSectionActive.not()
@@ -60,9 +64,8 @@ fun EchoesScreen(modifier: Modifier){
             return@LaunchedEffect
         delay(2000L)
         playbackViewModel.exoPlayer.clearMediaItems()
-        viewModel.resetPlace()
+        viewModel.reset()
     }
-
 
 
     LaunchedEffect(audioData) {
@@ -71,6 +74,19 @@ fun EchoesScreen(modifier: Modifier){
         audioData?.let {
             playbackViewModel.playAudio(it)
         }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            playbackViewModel.clearPlayer()
+            viewModel.reset()
+        }
+    }
+
+    BackHandler {
+        playbackViewModel.clearPlayer()
+        viewModel.reset()
+        activity?.finishAffinity()
     }
 
 
