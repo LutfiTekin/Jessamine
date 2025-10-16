@@ -37,8 +37,8 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 - **[Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page)**  
   Used to fetch the nearest landmark or place of interest based on coordinates.
 
-- **[OpenAI API](https://platform.openai.com/docs)** or compatible LLM endpoint  
-  Generates atmospheric, lore-rich descriptions of the nearby location.
+- **[OpenRouter API](https://openrouter.ai/docs)**  
+  Generates atmospheric, lore-rich descriptions of nearby locations using a flexible LLM routing platform.
 
 - **[MapLibre GL Android SDK](https://maplibre.org/projects/maplibre-gl-native/)**  
   Provides offline-friendly, customizable map rendering for visual
