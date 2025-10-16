@@ -23,6 +23,10 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
   <img src="docs/images/home_screen_location_pisa.png" width="30%" alt="Location: Pisa"/>
 </div>
 
+
+[![Watch on YouTube](https://img.youtube.com/vi/iheMolmcDSI/hqdefault.jpg)](https://youtube.com/shorts/iheMolmcDSI)
+
+
 ---
 
 ## APIs Used
