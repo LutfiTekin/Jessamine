@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.di.CurrentLocationFlow
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
+import tekin.luetfi.heart.of.jessamine.domain.usecase.GetLocationLoreUseCase
 import tekin.luetfi.heart.of.jessamine.util.ByteAccumulationDispatcher
 import tekin.luetfi.simple.map.data.model.Coordinates
 import javax.inject.Inject
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class EchoesViewModel @Inject constructor(
     private val locationInfoRepository: LocationInfoRepository,
     @param:CurrentLocationFlow private val locationFlow: StateFlow<Coordinates>,
-    private val byteDispatcher: ByteAccumulationDispatcher
+    private val byteDispatcher: ByteAccumulationDispatcher,
+    private val getLoreUseCase: GetLocationLoreUseCase
 ) : ViewModel() {
 
     val currentCoordinates = locationFlow
@@ -59,11 +61,7 @@ class EchoesViewModel @Inject constructor(
         viewModelScope.launch {
             loreJob?.cancelAndJoin()
             loreJob = launch {
-                locationInfoRepository.getLocationLore(coordinates)
-                    .runCatching {}
-                    .onFailure {
-                        locationInfoRepository.reset()
-                    }
+                getLoreUseCase(coordinates)
             }
         }
     }

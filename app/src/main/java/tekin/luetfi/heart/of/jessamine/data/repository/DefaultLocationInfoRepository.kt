@@ -1,33 +1,12 @@
 package tekin.luetfi.heart.of.jessamine.data.repository
 
-import com.squareup.moshi.Moshi
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tekin.luetfi.heart.of.jessamine.data.model.Place
-import tekin.luetfi.heart.of.jessamine.data.remote.MediaWikiApi
-import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
-import tekin.luetfi.heart.of.jessamine.data.remote.SpeechifyApi
-import tekin.luetfi.heart.of.jessamine.domain.model.ChatMessage
-import tekin.luetfi.heart.of.jessamine.domain.model.ChatRequest
-import tekin.luetfi.heart.of.jessamine.domain.model.ResponseFormat
-import tekin.luetfi.heart.of.jessamine.domain.model.SpeechRequest
 import tekin.luetfi.heart.of.jessamine.domain.model.SpeechResponse
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
-import tekin.luetfi.heart.of.jessamine.ui.component.Confirmation
-import tekin.luetfi.heart.of.jessamine.util.WHISPER_SYSTEM_PROMPT
-import tekin.luetfi.heart.of.jessamine.util.fallbackPlaces
-import tekin.luetfi.heart.of.jessamine.util.geoSearchString
-import tekin.luetfi.heart.of.jessamine.util.ssmlText
-import tekin.luetfi.simple.map.data.model.Coordinates
-import kotlin.coroutines.coroutineContext
 
-class DefaultLocationInfoRepository(
-    private val openRouterApi: OpenRouterAiApi,
-    private val speechifyApi: SpeechifyApi,
-    private val mediaWikiApi: MediaWikiApi,
-    private val moshi: Moshi
-) : LocationInfoRepository {
+class DefaultLocationInfoRepository() : LocationInfoRepository {
 
     private val _speechData = MutableStateFlow<SpeechResponse?>(null)
     override val speechData = _speechData.asStateFlow()
@@ -41,94 +20,12 @@ class DefaultLocationInfoRepository(
     }
 
 
-    override suspend fun getLocationLore(coordinates: Coordinates) {
-        //Select a nearby place from given coordinates
-        val place = selectPlace(coordinates)
-        coroutineContext.ensureActive()
+    override suspend fun updatePlace(place: Place) {
         _currentPlace.emit(place)
-        //Get lore about the place from llm
-        val lore = askLLM(place.name)
-        coroutineContext.ensureActive()
-        //start synthesizing whispers
-        synthesizeWhispers(lore)
     }
 
-    suspend fun synthesizeWhispers(lore: String?) {
-        if (lore == null){
-            reset()
-            return
-        }
-        speechifyApi.synthesize(SpeechRequest(lore.ssmlText)).runCatching {
-            _speechData.emit(this)
-        }
-    }
-
-
-    private suspend fun askLLM(placeName: String): String? {
-        val messages = listOf(
-            ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),
-            ChatMessage(role = "user", content = placeName)
-        )
-
-        val request = ChatRequest(
-            messages = messages,
-            responseFormat = ResponseFormat("json_object"),
-            model = "google/gemini-2.0-flash-001"
-            //model = "meta-llama/llama-3.3-8b-instruct:free"
-        )
-
-        val lore = try {
-            openRouterApi
-                .getChatCompletion(request)
-                .parseResponseOrNull<String>(moshi)
-                ?: throw Exception()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-        return lore
-    }
-
-    private suspend fun selectPlace(coordinates: Coordinates): Place {
-        val geoSearchString = coordinates.geoSearchString
-        //Get geo location info
-        val geoQuery = try {
-            mediaWikiApi.geoSearch(geoSearchCoordinates = geoSearchString, radius = 1400)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Place.unknown(coordinates)
-        }
-        coroutineContext.ensureActive()
-        val geoSearchItem = try {
-            geoQuery.query?.geoSearch?.random()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-        val placeName = geoSearchItem?.title ?: "Unknown Place"
-
-        val selectedCoordinates: Coordinates? = try {
-            geoSearchItem ?: throw Exception("Unknown Place")
-            Coordinates(geoSearchItem.lat, geoSearchItem.lon)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-
-        val confirmation = Confirmation(
-            finalText = placeName,
-            items = geoQuery.query?.geoSearch.orEmpty()
-                .map {
-                    it.title
-                } + fallbackPlaces)
-
-        val place = Place(
-            name = placeName,
-            coordinates = selectedCoordinates,
-            confirmation = confirmation
-        )
-
-        return place
+    override suspend fun updateSpeech(speech: SpeechResponse) {
+        _speechData.emit(speech)
     }
 
 

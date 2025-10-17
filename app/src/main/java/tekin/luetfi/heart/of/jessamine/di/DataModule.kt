@@ -5,43 +5,34 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
 import tekin.luetfi.heart.of.jessamine.data.remote.MediaWikiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.SpeechifyApi
-import tekin.luetfi.heart.of.jessamine.data.repository.DefaultLocationInfoRepository
-import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
+import tekin.luetfi.heart.of.jessamine.data.service.DefaultLLMService
+import tekin.luetfi.heart.of.jessamine.data.service.DefaultPlaceService
+import tekin.luetfi.heart.of.jessamine.data.service.DefaultTTSService
 import tekin.luetfi.heart.of.jessamine.domain.service.LLMService
 import tekin.luetfi.heart.of.jessamine.domain.service.PlaceService
 import tekin.luetfi.heart.of.jessamine.domain.service.TTSService
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+object DataModule {
 
     @Provides
     @Singleton
-    fun provideOpenRouterApi(@OpenRouterAi retrofit: Retrofit): OpenRouterAiApi =
-        retrofit.create(OpenRouterAiApi::class.java)
+    fun provideLLMService(openRouterAiApi: OpenRouterAiApi, moshi: Moshi): LLMService =
+        DefaultLLMService(openRouterAiApi, moshi)
 
     @Provides
     @Singleton
-    fun provideSpeechifyApi(@Speechify retrofit: Retrofit): SpeechifyApi =
-        retrofit.create(SpeechifyApi::class.java)
+    fun providePlaceService(mediaWikiApi: MediaWikiApi): PlaceService =
+        DefaultPlaceService(mediaWikiApi)
 
     @Provides
     @Singleton
-    fun provideMediaWikiApi(@MediaWiki retrofit: Retrofit): MediaWikiApi =
-        retrofit.create(MediaWikiApi::class.java)
-
-
-    @Provides
-    @Singleton
-    fun provideDefaultLocationInfoRepository(): LocationInfoRepository =
-        DefaultLocationInfoRepository()
-
-
+    fun provideTTSService(speechifyApi: SpeechifyApi): TTSService =
+        DefaultTTSService(speechifyApi)
 
 }
