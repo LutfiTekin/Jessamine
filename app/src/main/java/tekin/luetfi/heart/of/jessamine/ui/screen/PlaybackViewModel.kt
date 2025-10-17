@@ -18,9 +18,11 @@ import androidx.media3.datasource.DataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.util.environmentalReverbStereo
 import javax.inject.Inject
 
@@ -73,8 +75,9 @@ class PlaybackViewModel @Inject constructor(
     fun playAudio(audioData: String) {
         viewModelScope.launch {
             try {
-                val audioBytes = Base64.decode(audioData, Base64.DEFAULT)
-
+                val audioBytes = withContext(Dispatchers.IO){
+                    Base64.decode(audioData, Base64.DEFAULT)
+                }
 
                 // Create ByteArrayDataSource with the decoded audio
                 val byteArrayDataSource = ByteArrayDataSource(audioBytes)
