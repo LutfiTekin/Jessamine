@@ -33,30 +33,38 @@ class EchoesViewModel @Inject constructor(
 
     var loreJob: Job? = null
 
-    val audioData: StateFlow<String?> = locationInfoRepository.speechData.map { it?.audioData }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
+    val audioData: StateFlow<String?> =
+        locationInfoRepository.speechData.map { it?.audioData }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
-    val speechMarks: StateFlow<List<Triple<Long, Long, String>>> = locationInfoRepository.speechData.map { speechData ->
-        speechData?.speechMarks?.chunks?.mapNotNull { chunk ->
-            val startTime = (chunk["start_time"] as? Double)?.toLong() ?: return@mapNotNull null
-            val endTime = (chunk["end_time"] as? Double)?.toLong() ?: return@mapNotNull null
-            val value = chunk["value"] as? String ?: return@mapNotNull null
-            Triple(startTime, endTime, value.uppercase())
-        } ?: emptyList()
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+    val speechMarks: StateFlow<List<Triple<Long, Long, String>>> =
+        locationInfoRepository.speechData.map { speechData ->
+            speechData?.speechMarks?.chunks?.mapNotNull { chunk ->
+                val startTime = (chunk["start_time"] as? Double)?.toLong() ?: return@mapNotNull null
+                val endTime = (chunk["end_time"] as? Double)?.toLong() ?: return@mapNotNull null
+                val value = chunk["value"] as? String ?: return@mapNotNull null
+                Triple(startTime, endTime, value.uppercase())
+            } ?: emptyList()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
 
     fun getLocationLore(coordinates: Coordinates) {
         viewModelScope.launch {
             loreJob?.cancelAndJoin()
-            loreJob = launch { locationInfoRepository.getLocationLore(coordinates) }
+            loreJob = launch {
+                locationInfoRepository.getLocationLore(coordinates)
+                    .runCatching {}
+                    .onFailure {
+                        locationInfoRepository.reset()
+                    }
+            }
         }
     }
 

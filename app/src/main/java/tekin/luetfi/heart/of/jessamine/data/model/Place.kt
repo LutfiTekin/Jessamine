@@ -7,4 +7,8 @@ data class Place(
     val name: String,
     val coordinates: Coordinates?,
     val confirmation: Confirmation = Confirmation()
-)
+){
+    companion object{
+        fun unknown(coordinates: Coordinates) = Place("Unknown", coordinates)
+    }
+}

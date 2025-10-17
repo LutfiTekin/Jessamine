@@ -1,13 +1,9 @@
 package tekin.luetfi.heart.of.jessamine.data.repository
 
 import com.squareup.moshi.Moshi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.data.remote.MediaWikiApi
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
@@ -36,12 +32,6 @@ class DefaultLocationInfoRepository(
     private val _speechData = MutableStateFlow<SpeechResponse?>(null)
     override val speechData = _speechData.asStateFlow()
 
-    suspend fun synthesizeWhispers(lore: String) {
-        speechifyApi.synthesize(SpeechRequest(lore.ssmlText)).runCatching {
-            _speechData.emit(this)
-        }
-    }
-
     private val _currentPlace = MutableStateFlow<Place?>(null)
     override val currentPlace = _currentPlace.asStateFlow()
 
@@ -52,25 +42,74 @@ class DefaultLocationInfoRepository(
 
 
     override suspend fun getLocationLore(coordinates: Coordinates) {
+        //Select a nearby place from given coordinates
+        val place = selectPlace(coordinates)
+        coroutineContext.ensureActive()
+        _currentPlace.emit(place)
+        //Get lore about the place from llm
+        val lore = askLLM(place.name)
+        coroutineContext.ensureActive()
+        //start synthesizing whispers
+        synthesizeWhispers(lore)
+    }
+
+    suspend fun synthesizeWhispers(lore: String?) {
+        if (lore == null){
+            reset()
+            return
+        }
+        speechifyApi.synthesize(SpeechRequest(lore.ssmlText)).runCatching {
+            _speechData.emit(this)
+        }
+    }
+
+
+    private suspend fun askLLM(placeName: String): String? {
+        val messages = listOf(
+            ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),
+            ChatMessage(role = "user", content = placeName)
+        )
+
+        val request = ChatRequest(
+            messages = messages,
+            responseFormat = ResponseFormat("json_object"),
+            model = "google/gemini-2.0-flash-001"
+            //model = "meta-llama/llama-3.3-8b-instruct:free"
+        )
+
+        val lore = try {
+            openRouterApi
+                .getChatCompletion(request)
+                .parseResponseOrNull<String>(moshi)
+                ?: throw Exception()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        return lore
+    }
+
+    private suspend fun selectPlace(coordinates: Coordinates): Place {
         val geoSearchString = coordinates.geoSearchString
         //Get geo location info
         val geoQuery = try {
             mediaWikiApi.geoSearch(geoSearchCoordinates = geoSearchString, radius = 1400)
         } catch (e: Exception) {
             e.printStackTrace()
-            return
+            return Place.unknown(coordinates)
         }
         coroutineContext.ensureActive()
-        val selectedPlace = try {
+        val geoSearchItem = try {
             geoQuery.query?.geoSearch?.random()
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
-        val placeName = selectedPlace?.title ?: "Unknown Place"
+        val placeName = geoSearchItem?.title ?: "Unknown Place"
 
         val selectedCoordinates: Coordinates? = try {
-            selectedPlace ?: throw Exception("Unknown Place")
-            Coordinates(selectedPlace.lat, selectedPlace.lon)
+            geoSearchItem ?: throw Exception("Unknown Place")
+            Coordinates(geoSearchItem.lat, geoSearchItem.lon)
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -89,29 +128,8 @@ class DefaultLocationInfoRepository(
             confirmation = confirmation
         )
 
-        _currentPlace.emit(place)
-
-        val messages = listOf(
-            ChatMessage(role = "system", content = WHISPER_SYSTEM_PROMPT.trimIndent()),
-            ChatMessage(role = "user", content = placeName)
-        )
-
-        val request = ChatRequest(
-            messages = messages,
-            responseFormat = ResponseFormat("json_object"),
-            model = "google/gemini-2.0-flash-001"
-            //model = "meta-llama/llama-3.3-8b-instruct:free"
-        )
-
-        try {
-            val lore = openRouterApi
-                .getChatCompletion(request)
-                .parseResponseOrNull<String>(moshi)
-                ?: throw Exception()
-            coroutineContext.ensureActive()
-            synthesizeWhispers(lore)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        return place
     }
+
+
 }
