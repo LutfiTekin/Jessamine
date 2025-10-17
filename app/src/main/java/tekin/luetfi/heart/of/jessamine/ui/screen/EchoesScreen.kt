@@ -41,6 +41,7 @@ import kotlin.text.uppercase
 @Composable
 fun EchoesScreen(modifier: Modifier){
 
+    //region ViewModels and States
     val viewModel: EchoesViewModel = hiltViewModel()
     val playbackViewModel: PlaybackViewModel = hiltViewModel()
     val isPlaying by playbackViewModel.isPlaying.collectAsStateWithLifecycle()
@@ -58,7 +59,9 @@ fun EchoesScreen(modifier: Modifier){
                 && playbackViewModel.exoPlayer.mediaItemCount == 0
                 && currentPlace == null
     }
+    //endregion
 
+    //region Side Effects
     LaunchedEffect(isMediaSectionActive) {
         if (isMediaSectionActive || initialState)
             return@LaunchedEffect
@@ -82,14 +85,17 @@ fun EchoesScreen(modifier: Modifier){
             viewModel.reset()
         }
     }
+    //endregion
 
+    //region Back Handler
     BackHandler {
         playbackViewModel.clearPlayer()
         viewModel.reset()
         activity?.finishAffinity()
     }
+    //endregion
 
-
+    //region UI
     Box(modifier = modifier.fillMaxSize()){
         Column(
             modifier = Modifier
@@ -159,11 +165,11 @@ fun EchoesScreen(modifier: Modifier){
             )
         }
     }
-
-
+    //endregion
 
 }
 
+//region Helper Functions
 @Composable
 fun initialScreenText(): String{
     return arrayOf(
@@ -179,6 +185,7 @@ fun initialScreenText(): String{
         stringResource(R.string.draw_the_story_out)
     ).random().uppercase()
 }
+//endregion
 
 
 
