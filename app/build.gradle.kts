@@ -47,6 +47,8 @@ fun ApplicationDefaultConfig.populateBuildConfigFields(){
      */
     buildConfigField("String", "OPEN_ROUTER_APP_NAME", "\"Jessamine\"")
     buildConfigField("String", "APP_USER_AGENT", "\"Jessamine/1.0 (https://github.com/LutfiTekin/Jessamine) OkHttp/4.x\"")
+    buildConfigField("String", "SPEECHIFY_VOICE_ID", "\"lisa\"")
+    buildConfigField("String", "LLM_MODEL", "\"google/gemini-2.0-flash-001\"")
 }
 
 

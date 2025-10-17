@@ -1,6 +1,7 @@
 package tekin.luetfi.heart.of.jessamine.data.service
 
 import com.squareup.moshi.Moshi
+import tekin.luetfi.heart.of.jessamine.BuildConfig
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
 import tekin.luetfi.heart.of.jessamine.domain.model.ChatMessage
 import tekin.luetfi.heart.of.jessamine.domain.model.ChatRequest
@@ -22,7 +23,7 @@ class DefaultLLMService(
         val request = ChatRequest(
             messages = messages,
             responseFormat = ResponseFormat(),
-            model = "google/gemini-2.0-flash-001"
+            model = BuildConfig.LLM_MODEL
         )
 
         return try {
