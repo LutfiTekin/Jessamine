@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                 val hasPermission by locationPermission.collectAsStateWithLifecycle()
                 val echoesViewModel: EchoesViewModel = hiltViewModel()
                 val currentPlace: Place? by echoesViewModel.currentPlace.collectAsStateWithLifecycle(
-                    Place("", null))
+                    Place(""))
 
                 DynamicBackground(
                     modifier = Modifier,

@@ -28,7 +28,7 @@ class DefaultPlaceService(private val mediaWikiApi: MediaWikiApi): PlaceService 
             e.printStackTrace()
             null
         }
-        val placeName = geoSearchItem?.title ?: "Unknown Place"
+        val placeName = geoSearchItem?.title ?: Place.UNKNOWN
 
         val selectedCoordinates: Coordinates? = try {
             geoSearchItem ?: throw Exception()
@@ -45,13 +45,43 @@ class DefaultPlaceService(private val mediaWikiApi: MediaWikiApi): PlaceService 
                     it.title
                 } + fallbackPlaces)
 
+
         val place = Place(
             name = placeName,
             coordinates = selectedCoordinates,
             confirmation = confirmation
         )
 
-        return place
+        val description = getMoreContextAbout(place)
+        coroutineContext.ensureActive()
+        return place.copy(description = description)
+    }
+
+
+    private suspend fun getMoreContextAbout(place: Place): String? {
+        if (place.name == Place.UNKNOWN) {
+            return null
+        }
+        val description = try {
+            mediaWikiApi
+                .getPageDescription(titles = place.name)
+                .query
+                .pages
+                .entries
+                .first()
+                .value
+                .extract
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+
+
+        return buildString {
+            appendLine()
+            appendLine("More Context:")
+            append(description)
+        }
     }
 
 }

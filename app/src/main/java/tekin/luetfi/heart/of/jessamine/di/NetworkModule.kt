@@ -126,7 +126,7 @@ object NetworkModule {
         val builder = original.newBuilder()
             .header("Authorization", "Bearer ${BuildConfig.OPENROUTERAI_API_KEY}")
             //Optional but recommended by OpenRouter
-            .header("HTTP-Referer", context.packageName)
+            .header("HTTP-Referer", "https://" + context.packageName)
             .header("X-Title", BuildConfig.OPEN_ROUTER_APP_NAME)
 
         chain.proceed(builder.build())

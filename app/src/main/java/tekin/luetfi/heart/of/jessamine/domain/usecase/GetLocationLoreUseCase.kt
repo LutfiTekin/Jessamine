@@ -22,7 +22,7 @@ class GetLocationLoreUseCase @Inject constructor(
             val place = placeService.selectPlace(coordinates)
             locationInfoRepository.updatePlace(place)
             coroutineContext.ensureActive()
-            val lore = llmService.getLore(place.name) ?: run {
+            val lore = llmService.getLore(place) ?: run {
                 locationInfoRepository.reset()
                 return
             }

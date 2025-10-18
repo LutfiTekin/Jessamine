@@ -2,6 +2,7 @@ package tekin.luetfi.heart.of.jessamine.data.service
 
 import com.squareup.moshi.Moshi
 import tekin.luetfi.heart.of.jessamine.BuildConfig
+import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.data.remote.OpenRouterAiApi
 import tekin.luetfi.heart.of.jessamine.domain.model.ChatMessage
 import tekin.luetfi.heart.of.jessamine.domain.model.ChatRequest
@@ -14,15 +15,15 @@ class DefaultLLMService(
 ): LLMService {
 
 
-    override suspend fun getLore(placeName: String): String? {
+    override suspend fun getLore(place: Place): String? {
         val messages = listOf(
             ChatMessage.systemPrompt,
-            ChatMessage.userPrompt(placeName)
+            ChatMessage.userPrompt(place.context)
         )
 
         val request = ChatRequest(
             messages = messages,
-            responseFormat = ResponseFormat(),
+            responseFormat = ResponseFormat("text"),
             model = BuildConfig.LLM_MODEL
         )
 
