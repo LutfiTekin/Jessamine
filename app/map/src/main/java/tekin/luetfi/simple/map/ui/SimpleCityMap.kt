@@ -187,7 +187,6 @@ fun rememberAzimuth(alpha: Float = 0.2f): Double { // Adjustable alpha for smoot
                     azimuth.doubleValue = (smoothedAngle + 360) % 360 // Re-normalize
 
                     rawAzimuth.doubleValue = rawAngle // Optional: log raw for comparison
-                    println("Raw azimuth: $rawAngle, Smoothed: ${azimuth.doubleValue}")
                 }
             }
 
