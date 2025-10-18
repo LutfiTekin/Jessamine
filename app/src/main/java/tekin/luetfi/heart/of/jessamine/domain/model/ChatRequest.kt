@@ -10,7 +10,7 @@ data class ChatRequest(
     val model: String,
     val messages: List<ChatMessage>,
     val temperature: Double = 0.2,
-    @field:Json("response_format") val responseFormat: ResponseFormat = ResponseFormat()
+    @Json(name = "response_format") val responseFormat: ResponseFormat = ResponseFormat()
 )
 
 @Serializable
