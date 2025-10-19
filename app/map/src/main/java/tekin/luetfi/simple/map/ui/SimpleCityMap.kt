@@ -182,7 +182,7 @@ fun rememberAzimuth(alpha: Float = 0.2f): Double { // Adjustable alpha for smoot
                     var delta = rawAngle - oldSmoothed
                     // Adjust delta for shortest angular path
                     if (delta > 180) delta -= 360 else if (delta < -180) delta += 360
-                    val smoothedAngle = (oldSmoothed + delta * (1 - alpha)).toDouble()
+                    val smoothedAngle = (oldSmoothed + delta * (1 - alpha))
                     azimuth.doubleValue = (smoothedAngle + 360) % 360 // Re-normalize
                 }
             }
