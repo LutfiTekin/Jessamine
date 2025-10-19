@@ -164,7 +164,6 @@ fun rememberAzimuth(alpha: Float = 0.2f): Double { // Adjustable alpha for smoot
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
     val rotationSensor = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) }
 
-    val rawAzimuth = remember { mutableDoubleStateOf(0.toDouble()) } // Raw before smoothing
     val azimuth = remember { mutableDoubleStateOf(0.toDouble()) } // Smoothed output
 
     DisposableEffect(Unit) {
@@ -185,8 +184,6 @@ fun rememberAzimuth(alpha: Float = 0.2f): Double { // Adjustable alpha for smoot
                     if (delta > 180) delta -= 360 else if (delta < -180) delta += 360
                     val smoothedAngle = (oldSmoothed + delta * (1 - alpha)).toDouble()
                     azimuth.doubleValue = (smoothedAngle + 360) % 360 // Re-normalize
-
-                    rawAzimuth.doubleValue = rawAngle // Optional: log raw for comparison
                 }
             }
 
