@@ -107,4 +107,22 @@ class DefaultCacheService(
         }
     }
 
+    override suspend fun getCachedPlaces(): List<Place> {
+        return withContext(Dispatchers.IO) {
+            val prefs = dataStore.data.firstOrNull() ?: return@withContext emptyList()
+
+            prefs.asMap().mapNotNull { (_, value) ->
+                try {
+                    val json = value as? String ?: return@mapNotNull null
+                    val metadataMap = mapAdapter.fromJson(json) ?: return@mapNotNull null
+                    val placeJson = metadataMap[PLACE] as? String ?: return@mapNotNull null
+                    placeAdapter.fromJson(placeJson)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+        }
+    }
+
 }

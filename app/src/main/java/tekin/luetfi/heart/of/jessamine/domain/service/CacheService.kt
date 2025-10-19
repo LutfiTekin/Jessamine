@@ -11,4 +11,6 @@ interface CacheService {
 
     suspend fun isCacheHit(placeKey: String): Boolean
 
+    suspend fun getCachedPlaces(): List<Place>
+
 }

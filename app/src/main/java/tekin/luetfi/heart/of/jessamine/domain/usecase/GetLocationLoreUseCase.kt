@@ -1,6 +1,8 @@
 package tekin.luetfi.heart.of.jessamine.domain.usecase
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.data.model.Place
 import tekin.luetfi.heart.of.jessamine.domain.model.SpeechResponse
 import tekin.luetfi.heart.of.jessamine.domain.repository.LocationInfoRepository
@@ -23,10 +25,14 @@ class GetLocationLoreUseCase @Inject constructor(
 
     suspend operator fun invoke(coordinates: Coordinates) {
         try {
-            val place = placeService.selectPlace(coordinates)
-            val cacheHit = loadCachedPlace(place)
-            if (cacheHit)
+            var place: Place = placeService.selectPlace(coordinates)
+            if (place.name == Place.UNKNOWN){
+                //Try cached places
+                place = loadRandomCachedPlace(fallbackCoordinates = coordinates)
+            }
+            if (cacheHit(place)) {
                 return
+            }
             locationInfoRepository.updatePlace(place)
             coroutineContext.ensureActive()
             val lore = llmService.getLore(place) ?: run {
@@ -44,7 +50,7 @@ class GetLocationLoreUseCase @Inject constructor(
         }
     }
 
-    private suspend fun loadCachedPlace(place: Place): Boolean{
+    private suspend fun cacheHit(place: Place): Boolean{
         if (cacheService.isCacheHit(place.key).not())
             return false
         try {
@@ -57,6 +63,18 @@ class GetLocationLoreUseCase @Inject constructor(
             return false
         }
         return true
+    }
+
+    private suspend fun loadRandomCachedPlace(fallbackCoordinates: Coordinates): Place{
+        val cachedPlaces = cacheService.getCachedPlaces()
+        if (cachedPlaces.isEmpty()) return Place.unknown(fallbackCoordinates)
+        return withContext(Dispatchers.IO){
+            val randomPlace = cachedPlaces.random()
+            val mergedConfirmation = randomPlace.confirmation.copy(
+                items = cachedPlaces.map { it.confirmation.list }.flatten().toSet().toList()
+            )
+            randomPlace.copy(confirmation = mergedConfirmation)
+        }
     }
 
 
