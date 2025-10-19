@@ -78,6 +78,13 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 - [Moshi](https://github.com/square/moshi)
 - [Kotlinx Serialization](https://kotlinlang.org/docs/serialization.html)
 
+
+### Persistence & Local Storage
+- [Jetpack DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
+
+> 🛡️ **Security Note:** If storing location-based or generated lore locally, ensure sensitive data is encrypted or anonymized. Consider using `EncryptedDataStore` or a secure wrapper for any personally identifiable information (PII).
+
+
 ### Media Playback
 - [Media3 ExoPlayer](https://developer.android.com/media/media3/exoplayer)
 

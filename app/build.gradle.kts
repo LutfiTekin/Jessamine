@@ -146,8 +146,11 @@ dependencies {
     implementation(libs.retrofit.converter.moshi)
     implementation(libs.logging.interceptor)
 
+    //Data Persistency
+    implementation(libs.datastore.preferences)
 
-    // Dependency Injection - Hilt
+
+    //Dependency Injection - Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)

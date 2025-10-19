@@ -93,7 +93,7 @@ object NetworkModule {
             .addNetworkInterceptor(UserAgentInterceptor())
             .addNetworkInterceptor(downloadProgressInterceptor)
             .addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
+            //.addInterceptor(loggingInterceptor)
             .build()
 
     class DownloadProgressInterceptor(

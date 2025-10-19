@@ -17,7 +17,7 @@ data class SpeechMarks(
 @JsonClass(generateAdapter = true)
 data class SpeechResponse(
     @field:Json(name = "audio_data") val audioData: String,
-    @field:Json(name = "audio_format") val audioFormat: String,
-    @field:Json(name = "billable_characters_count") val billableCharactersCount: Long,
+    @field:Json(name = "audio_format") val audioFormat: String = "",
+    @field:Json(name = "billable_characters_count") val billableCharactersCount: Long = 0L,
     @field:Json(name = "speech_marks") val speechMarks: SpeechMarks? = null
 )

@@ -59,6 +59,8 @@ fun EchoesScreen(modifier: Modifier){
                 && playbackViewModel.exoPlayer.mediaItemCount == 0
                 && currentPlace == null
     }
+
+    var placeNameSettled by remember(currentPlace) { mutableStateOf(false) }
     //endregion
 
     //region Side Effects
@@ -71,8 +73,11 @@ fun EchoesScreen(modifier: Modifier){
     }
 
 
-    LaunchedEffect(audioData) {
+    LaunchedEffect(audioData, placeNameSettled) {
         if (isPlaying)
+            return@LaunchedEffect
+        //Wait until place name is shown on screen
+        if (!placeNameSettled)
             return@LaunchedEffect
         audioData?.let {
             playbackViewModel.playAudio(it)
@@ -112,7 +117,6 @@ fun EchoesScreen(modifier: Modifier){
             }
 
             currentPlace?.let { place ->
-                var placeNameSettled by remember(place) { mutableStateOf(false) }
                 if (placeNameSettled) {
                     HeartbeatEffect(
                         isBeating = isPlaying.not(),

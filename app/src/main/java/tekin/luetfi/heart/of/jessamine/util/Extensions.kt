@@ -5,6 +5,9 @@ import okhttp3.Response
 import tekin.luetfi.heart.of.jessamine.BuildConfig
 import tekin.luetfi.simple.map.data.model.Coordinates
 
+const val PLACE = "place"
+const val SPEECH_MARKS = "speechMarks"
+
 val Coordinates.geoSearchString: String
     get() = "$lat|$lon"
 

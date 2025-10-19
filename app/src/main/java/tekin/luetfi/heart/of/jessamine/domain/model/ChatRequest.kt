@@ -1,7 +1,6 @@
 package tekin.luetfi.heart.of.jessamine.domain.model
 
 import com.squareup.moshi.Json
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import tekin.luetfi.heart.of.jessamine.util.WHISPER_SYSTEM_PROMPT
 

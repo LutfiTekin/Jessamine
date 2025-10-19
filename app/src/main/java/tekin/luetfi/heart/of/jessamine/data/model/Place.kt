@@ -1,5 +1,6 @@
 package tekin.luetfi.heart.of.jessamine.data.model
 
+import android.util.Base64
 import tekin.luetfi.heart.of.jessamine.ui.component.Confirmation
 import tekin.luetfi.simple.map.data.model.Coordinates
 
@@ -12,6 +13,15 @@ data class Place(
     val coordinates: Coordinates? = null,
     val confirmation: Confirmation = Confirmation()
 ){
+
+    /**
+     * Store place name in base64 encoded string to avoid special character causing a mismatch
+     */
+    val key: String
+        get() {
+            val bytes = name.toByteArray(Charsets.UTF_8)
+            return Base64.encodeToString(bytes, Base64.NO_WRAP)
+        }
 
     val context: String
         get() {
