@@ -114,7 +114,6 @@ dependencies {
     // AndroidX Core & Lifecycle
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.work.runtime)
 
     // Jetpack Compose
     implementation(libs.androidx.activity.compose)
@@ -156,7 +155,6 @@ dependencies {
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.hilt.work)
 
     //Media
     implementation(libs.androidx.media3.exoplayer)
