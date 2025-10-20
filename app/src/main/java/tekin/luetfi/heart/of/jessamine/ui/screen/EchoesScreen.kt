@@ -20,6 +20,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,10 +51,10 @@ fun EchoesScreen(modifier: Modifier) {
     val currentCoordinates by viewModel.currentCoordinates.collectAsStateWithLifecycle()
     val audioData by viewModel.audioData.collectAsStateWithLifecycle()
     val speechMarks by viewModel.speechMarks.collectAsStateWithLifecycle()
-    val playerRef = remember { playbackViewModel.exoPlayer }
     val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
     val bytes by viewModel.bytesAccumulated.collectAsState()
     val activity = LocalActivity.current
+    var placeNameSettled by rememberSaveable { mutableStateOf(false) }
 
     val initialState by remember(isMediaSectionActive, currentPlace) {
         derivedStateOf {
@@ -63,16 +64,20 @@ fun EchoesScreen(modifier: Modifier) {
         }
     }
 
-    var placeNameSettled by remember(currentPlace) { mutableStateOf(false) }
     //endregion
 
     //region Side Effects
+    fun resetUI() {
+        playbackViewModel.exoPlayer.clearMediaItems()
+        placeNameSettled = false
+        viewModel.reset()
+    }
+
     LaunchedEffect(isMediaSectionActive) {
         if (isMediaSectionActive || initialState)
             return@LaunchedEffect
         delay(2000L)
-        playbackViewModel.exoPlayer.clearMediaItems()
-        viewModel.reset()
+        resetUI()
     }
 
 
@@ -87,18 +92,12 @@ fun EchoesScreen(modifier: Modifier) {
         }
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            playbackViewModel.clearPlayer()
-            viewModel.reset()
-        }
-    }
     //endregion
 
     //region Back Handler
     BackHandler {
         playbackViewModel.clearPlayer()
-        viewModel.reset()
+        resetUI()
         activity?.finishAffinity()
     }
     //endregion
@@ -115,7 +114,7 @@ fun EchoesScreen(modifier: Modifier) {
             if (isMediaSectionActive) {
                 SpeechHighlighter(
                     modifier = Modifier.padding(24.dp),
-                    player = playerRef,
+                    player = playbackViewModel.exoPlayer,
                     speechMarks = speechMarks
                 )
             }
@@ -167,14 +166,14 @@ fun EchoesScreen(modifier: Modifier) {
                     if (initialState) {
                         viewModel.getLocationLore(currentCoordinates)
                     } else {
-                        viewModel.reset()
+                        resetUI()
                     }
                 }) {
         }
         if (isMediaSectionActive) {
             GestureSeekOverlay(
                 modifier = Modifier.fillMaxSize(),
-                player = playerRef
+                player = playbackViewModel.exoPlayer
             )
         }
     }
