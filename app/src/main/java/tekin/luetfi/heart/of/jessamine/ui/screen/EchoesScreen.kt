@@ -2,6 +2,7 @@ package tekin.luetfi.heart.of.jessamine.ui.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -36,6 +36,7 @@ import tekin.luetfi.heart.of.jessamine.R
 import tekin.luetfi.heart.of.jessamine.ui.component.AnimatedConfirmation
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
+import tekin.luetfi.heart.of.jessamine.ui.component.PlayToggleOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
 import tekin.luetfi.heart.of.jessamine.util.beatDurationMillis
 import kotlin.text.uppercase
@@ -54,6 +55,7 @@ fun EchoesScreen(modifier: Modifier) {
     val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
     val bytes by viewModel.bytesAccumulated.collectAsState()
     val activity = LocalActivity.current
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     var placeNameSettled by rememberSaveable { mutableStateOf(false) }
 
     val initialState by remember(isMediaSectionActive, currentPlace) {
@@ -158,18 +160,17 @@ fun EchoesScreen(modifier: Modifier) {
                 textAlign = TextAlign.Center
             )
         }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent)
-                .clickable {
-                    if (initialState) {
-                        viewModel.getLocationLore(currentCoordinates)
-                    } else {
-                        resetUI()
-                    }
-                }) {
-        }
+        PlayToggleOverlay(
+            initialState = initialState,
+            onStart = {
+                viewModel.getLocationLore(currentCoordinates)
+            },
+            onReset = {
+                resetUI()
+            },
+            onFinish = {
+                backDispatcher?.onBackPressed()
+            })
         if (isMediaSectionActive) {
             GestureSeekOverlay(
                 modifier = Modifier.fillMaxSize(),
