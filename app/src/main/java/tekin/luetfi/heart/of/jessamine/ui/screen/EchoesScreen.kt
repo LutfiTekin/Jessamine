@@ -157,8 +157,10 @@ fun EchoesScreen(modifier: Modifier){
                 .fillMaxSize()
                 .background(Color.Transparent)
                 .clickable {
-                    if (!isPlaying) {
+                    if (initialState) {
                         viewModel.getLocationLore(currentCoordinates)
+                    }else {
+                        viewModel.reset()
                     }
                 }) {
         }
