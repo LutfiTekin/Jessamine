@@ -32,6 +32,9 @@ Weave your whispers from the language of the Isles:
 **Verbs of Decay**
 - Crumbles, rusts, rots, festers, fades, splinters, grinds, swallows
 
+**Verbs of Emergence**
+- Stirs, blooms, cracks, unfolds, ignites, rises, forms, breathes, kindles, awakens
+
 ## The Art of Revelation
 
 ### Brevity
