@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +40,7 @@ import tekin.luetfi.heart.of.jessamine.util.beatDurationMillis
 import kotlin.text.uppercase
 
 @Composable
-fun EchoesScreen(modifier: Modifier){
+fun EchoesScreen(modifier: Modifier) {
 
     //region ViewModels and States
     val viewModel: EchoesViewModel = hiltViewModel()
@@ -49,15 +50,17 @@ fun EchoesScreen(modifier: Modifier){
     val currentCoordinates by viewModel.currentCoordinates.collectAsStateWithLifecycle()
     val audioData by viewModel.audioData.collectAsStateWithLifecycle()
     val speechMarks by viewModel.speechMarks.collectAsStateWithLifecycle()
-    val playerRef = playbackViewModel.exoPlayer
+    val playerRef = remember { playbackViewModel.exoPlayer }
     val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
     val bytes by viewModel.bytesAccumulated.collectAsState()
     val activity = LocalActivity.current
 
-    val initialState = remember(isMediaSectionActive,currentPlace) {
-        isMediaSectionActive.not()
-                && playbackViewModel.exoPlayer.mediaItemCount == 0
-                && currentPlace == null
+    val initialState by remember(isMediaSectionActive, currentPlace) {
+        derivedStateOf {
+            isMediaSectionActive.not()
+                    && playbackViewModel.exoPlayer.mediaItemCount == 0
+                    && currentPlace == null
+        }
     }
 
     var placeNameSettled by remember(currentPlace) { mutableStateOf(false) }
@@ -101,7 +104,7 @@ fun EchoesScreen(modifier: Modifier){
     //endregion
 
     //region UI
-    Box(modifier = modifier.fillMaxSize()){
+    Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,23 +116,26 @@ fun EchoesScreen(modifier: Modifier){
                 SpeechHighlighter(
                     modifier = Modifier.padding(24.dp),
                     player = playerRef,
-                    speechMarks = speechMarks)
+                    speechMarks = speechMarks
+                )
             }
 
             currentPlace?.let { place ->
                 if (placeNameSettled) {
                     HeartbeatEffect(
                         isBeating = isPlaying.not(),
-                        beatDurationMillis = bytes.beatDurationMillis) { modifier ->
+                        beatDurationMillis = bytes.beatDurationMillis
+                    ) { modifier ->
                         Text(
                             modifier = modifier,
                             text = place.name.uppercase(),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center)
+                            textAlign = TextAlign.Center
+                        )
                     }
-                }else {
+                } else {
                     AnimatedConfirmation(
                         modifier = Modifier,
                         confirmation = place.confirmation,
@@ -150,7 +156,8 @@ fun EchoesScreen(modifier: Modifier){
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center)
+                textAlign = TextAlign.Center
+            )
         }
         Box(
             modifier = Modifier
@@ -159,7 +166,7 @@ fun EchoesScreen(modifier: Modifier){
                 .clickable {
                     if (initialState) {
                         viewModel.getLocationLore(currentCoordinates)
-                    }else {
+                    } else {
                         viewModel.reset()
                     }
                 }) {
@@ -177,7 +184,7 @@ fun EchoesScreen(modifier: Modifier){
 
 //region Helper Functions
 @Composable
-fun initialScreenText(): String{
+fun initialScreenText(): String {
     return arrayOf(
         stringResource(R.string.unseal_the_truth),
         stringResource(R.string.the_stone_remembers),
