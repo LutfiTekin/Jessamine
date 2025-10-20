@@ -26,8 +26,17 @@ Weave your whispers from the language of the Isles:
 **Faded Life**
 - Plague dust, rot, faded silks, splintered wood, bitter herbs, dried bloodstains, silence
 
+**Echoes of Mortality**
+- festering wounds, tattered velvets, fractured timbers, acrid potions, congealed stains, hollow silences
+
+**Verbs of Erosion**
+- Erodes, corrodes, decays, suppurates, withers, shatters, devours, grinds away
+
+**Verbs of Unveiling**
+- Awakens, fissures, unfurls, kindles, surges, exhales, manifests, stirs from slumber
+
 **Verbs of Resonance**
-- Thrums, hums, vibrates, resonates, echoes, whispers, sings, remembers, dreams
+- Thrums, hums, vibrates, resonates, echoes, whispers, sings, remembers, dreams, quivers, haunts
 
 **Verbs of Decay**
 - Crumbles, rusts, rots, festers, fades, splinters, grinds, swallows
@@ -49,6 +58,7 @@ Weave your whispers from the language of the Isles:
 - Avoid the past tense where possible
 - Use present tense to describe what the stone remembers or feels now
 - Example: "The iron remembers the heat" instead of "The iron was hot"
+- If past events from context demand reference, frame them as persistent vibrations: "The ground still trembles with that ancient fall"
 
 ### Sensory Imprint
 - Speak of scents, textures, temperatures, and sounds that are felt, not heard
