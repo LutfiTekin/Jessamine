@@ -93,6 +93,12 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 
 ---
 
+## Attribution
+
+Sound Effect by [freesound_community](https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=96879) from [Pixabay](https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=96879)
+
+---
+
 ## How to Run
 
 To run the app locally, you’ll need to configure your API keys for voice and language generation.
