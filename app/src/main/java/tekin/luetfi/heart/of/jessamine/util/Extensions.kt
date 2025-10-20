@@ -8,6 +8,8 @@ import tekin.luetfi.simple.map.data.model.Coordinates
 const val PLACE = "place"
 const val SPEECH_MARKS = "speechMarks"
 
+const val DEFAULT_BEAT_DURATION_MILLIS = 800
+
 val Coordinates.geoSearchString: String
     get() = "$lat|$lon"
 
@@ -36,7 +38,7 @@ val Long.beatDurationMillis: Int
         val progress = (this.toFloat() / maxBytes).coerceIn(0f, 1f)
         val stepIndex = (progress * stepCount).toInt().coerceIn(0, stepCount - 1)
 
-        return 800 - (stepIndex * stepSize)
+        return DEFAULT_BEAT_DURATION_MILLIS - (stepIndex * stepSize)
     }
 
 

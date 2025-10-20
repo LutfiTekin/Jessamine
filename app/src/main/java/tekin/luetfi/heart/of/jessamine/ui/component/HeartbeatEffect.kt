@@ -3,11 +3,6 @@ package tekin.luetfi.heart.of.jessamine.ui.component
 import android.media.AudioAttributes
 import android.media.SoundPool
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -19,12 +14,13 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import tekin.luetfi.heart.of.jessamine.R
+import tekin.luetfi.heart.of.jessamine.util.DEFAULT_BEAT_DURATION_MILLIS
 import tekin.luetfi.heart.of.jessamine.util.isCloseTo
 
 @Composable
 fun HeartbeatEffect(
     isBeating: Boolean,
-    beatDurationMillis: Int = 800,
+    beatDurationMillis: Int = DEFAULT_BEAT_DURATION_MILLIS,
     content: @Composable (Modifier) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
