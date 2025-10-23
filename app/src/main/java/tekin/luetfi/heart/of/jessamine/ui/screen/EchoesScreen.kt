@@ -3,8 +3,6 @@ package tekin.luetfi.heart.of.jessamine.ui.screen
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +37,7 @@ import tekin.luetfi.heart.of.jessamine.ui.component.PlayToggleOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
 import tekin.luetfi.heart.of.jessamine.util.beatDurationMillis
 import kotlin.text.uppercase
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun EchoesScreen(modifier: Modifier) {
@@ -56,7 +54,7 @@ fun EchoesScreen(modifier: Modifier) {
     val bytes by viewModel.bytesAccumulated.collectAsState()
     val activity = LocalActivity.current
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-    var placeNameSettled by rememberSaveable { mutableStateOf(false) }
+    var isPlaceNameSettled by rememberSaveable { mutableStateOf(false) }
 
     val initialState by remember(isMediaSectionActive, currentPlace) {
         derivedStateOf {
@@ -71,23 +69,23 @@ fun EchoesScreen(modifier: Modifier) {
     //region Side Effects
     fun resetUI() {
         playbackViewModel.exoPlayer.clearMediaItems()
-        placeNameSettled = false
+        isPlaceNameSettled = false
         viewModel.reset()
     }
 
     LaunchedEffect(isMediaSectionActive) {
         if (isMediaSectionActive || initialState)
             return@LaunchedEffect
-        delay(2000L)
+        delay(2.seconds)
         resetUI()
     }
 
 
-    LaunchedEffect(audioData, placeNameSettled) {
+    LaunchedEffect(audioData, isPlaceNameSettled) {
         if (isPlaying)
             return@LaunchedEffect
         //Wait until place name is shown on screen
-        if (!placeNameSettled)
+        if (!isPlaceNameSettled)
             return@LaunchedEffect
         audioData?.let {
             playbackViewModel.playAudio(it)
@@ -124,7 +122,7 @@ fun EchoesScreen(modifier: Modifier) {
             }
 
             currentPlace?.let { place ->
-                if (placeNameSettled) {
+                if (isPlaceNameSettled) {
                     HeartbeatEffect(
                         isBeating = isPlaying.not(),
                         beatDurationMillis = bytes.beatDurationMillis
@@ -143,7 +141,7 @@ fun EchoesScreen(modifier: Modifier) {
                         modifier = Modifier,
                         confirmation = place.confirmation,
                         onAnimationEnd = {
-                            placeNameSettled = true
+                            isPlaceNameSettled = true
                         })
                 }
             }
