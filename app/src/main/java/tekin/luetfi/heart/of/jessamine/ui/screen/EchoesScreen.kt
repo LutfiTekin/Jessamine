@@ -98,9 +98,11 @@ fun EchoesScreen(modifier: Modifier) {
 
     //region Back Handler
     BackHandler {
-        playbackViewModel.clearPlayer()
         resetUI()
-        activity?.finishAffinity()
+        if (initialState){
+            playbackViewModel.clearPlayer()
+            activity?.finishAffinity()
+        }
     }
     //endregion
 
