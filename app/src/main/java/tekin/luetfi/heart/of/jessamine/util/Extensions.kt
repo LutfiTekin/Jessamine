@@ -4,6 +4,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import tekin.luetfi.heart.of.jessamine.BuildConfig
 import tekin.luetfi.simple.map.data.model.Coordinates
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 const val PLACE = "place"
 const val SPEECH_MARKS = "speechMarks"
@@ -12,6 +14,12 @@ const val DEFAULT_BEAT_DURATION_MILLIS = 800
 
 val Coordinates.geoSearchString: String
     get() = "$lat|$lon"
+
+/**
+ * Amount of time to wait if there is cache hit
+ */
+val placeNameSettleAnimationDuration
+    get() = 3.seconds + (3 * DEFAULT_BEAT_DURATION_MILLIS).milliseconds
 
 
 class UserAgentInterceptor(private val userAgent: String = BuildConfig.APP_USER_AGENT) : Interceptor {

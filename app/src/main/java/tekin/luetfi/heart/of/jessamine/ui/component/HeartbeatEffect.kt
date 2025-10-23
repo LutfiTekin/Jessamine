@@ -60,6 +60,8 @@ fun HeartbeatEffect(
     LaunchedEffect(scale) {
         if (isBeating && (scale.isCloseTo(1.3f) || scale.isCloseTo(1.2f))) {
             haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
+        }
+        if (isBeating && scale.isCloseTo(1.3f)) {
             playHeartbeatSound()
         }
     }

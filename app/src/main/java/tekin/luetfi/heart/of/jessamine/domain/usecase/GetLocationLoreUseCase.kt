@@ -12,11 +12,13 @@ import tekin.luetfi.heart.of.jessamine.domain.service.CacheService
 import tekin.luetfi.heart.of.jessamine.domain.service.PlaceService
 import tekin.luetfi.heart.of.jessamine.domain.service.TTSService
 import tekin.luetfi.heart.of.jessamine.util.DEFAULT_BEAT_DURATION_MILLIS
+import tekin.luetfi.heart.of.jessamine.util.placeNameSettleAnimationDuration
 import tekin.luetfi.simple.map.data.model.Coordinates
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class GetLocationLoreUseCase @Inject constructor(
     private val placeService: PlaceService,
@@ -61,7 +63,7 @@ class GetLocationLoreUseCase @Inject constructor(
                 cacheService.reconstructFromCache(place.key).entries.first()
             locationInfoRepository.updatePlace(place)
             // Wait before loading speech to stay synchronized with the heartbeat effect
-            delay((3 * DEFAULT_BEAT_DURATION_MILLIS).milliseconds)
+            delay(placeNameSettleAnimationDuration)
             locationInfoRepository.updateSpeech(speechResponse)
         } catch (e: Exception) {
             e.printStackTrace()
