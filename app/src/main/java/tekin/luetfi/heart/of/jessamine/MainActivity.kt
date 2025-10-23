@@ -112,13 +112,3 @@ fun Activity.enterFullscreen() {
                 )
     }
 }
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    JessamineTheme {
-
-    }
-}
