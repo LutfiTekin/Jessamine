@@ -1,4 +1,4 @@
-package tekin.luetfi.heart.of.jessamine.ui.screen
+package tekin.luetfi.heart.of.jessamine.common.ui.viewmodel
 
 import android.app.Application
 import androidx.media3.session.MediaSession

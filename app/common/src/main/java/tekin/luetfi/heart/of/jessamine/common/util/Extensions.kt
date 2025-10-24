@@ -1,15 +1,20 @@
 package tekin.luetfi.heart.of.jessamine.common.util
 
+import android.Manifest
+import android.app.Activity
+import androidx.core.app.ActivityCompat
 import okhttp3.Interceptor
 import okhttp3.Response
 import tekin.luetfi.heart.of.jessamine.common.BuildConfig
 import tekin.luetfi.simple.map.data.model.Coordinates
+import tekin.luetfi.simple.map.hasLocationPermission
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 const val PLACE = "place"
 const val SPEECH_MARKS = "speechMarks"
+const val LOCATION_PERMISSION_REQUEST_CODE = 6
 
 const val DEFAULT_BEAT_DURATION_MILLIS = 800
 
@@ -90,4 +95,14 @@ val fallbackPlaces = listOf(
     "West Bell Tower",
     "The Forgotten Tunnel"
 )
+
+fun Activity.requestLocationPermission() {
+    if (hasLocationPermission.not()) {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            LOCATION_PERMISSION_REQUEST_CODE
+        )
+    }
+}
 

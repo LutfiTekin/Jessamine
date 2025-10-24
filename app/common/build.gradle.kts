@@ -130,6 +130,7 @@ dependencies {
     api(libs.navigation.compose)
     api(libs.kotlinx.serialization.json)
     api(libs.compose.ui.text.google.fonts)
+    api(libs.androidx.hilt.navigation.compose)
 
 
     //Networking

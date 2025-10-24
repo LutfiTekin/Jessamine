@@ -1,4 +1,4 @@
-package tekin.luetfi.heart.of.jessamine.ui.screen
+package tekin.luetfi.heart.of.jessamine.common.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
