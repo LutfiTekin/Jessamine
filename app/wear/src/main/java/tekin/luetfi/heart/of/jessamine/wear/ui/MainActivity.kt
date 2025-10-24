@@ -31,10 +31,12 @@ import androidx.wear.compose.material.TimeText
 import androidx.wear.tooling.preview.devices.WearDevices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
+import tekin.luetfi.heart.of.jessamine.common.data.model.Place
 import tekin.luetfi.heart.of.jessamine.common.di.LocationPermissionFlow
 import tekin.luetfi.heart.of.jessamine.common.ui.component.initialScreenText
 import tekin.luetfi.heart.of.jessamine.common.util.LOCATION_PERMISSION_REQUEST_CODE
 import tekin.luetfi.heart.of.jessamine.common.util.requestLocationPermission
+import tekin.luetfi.heart.of.jessamine.wear.ui.component.CurvedPlaceLabel
 import tekin.luetfi.heart.of.jessamine.wear.ui.component.LocationWarningCurved
 import tekin.luetfi.heart.of.jessamine.wear.ui.screen.EchoesScreen
 import tekin.luetfi.heart.of.jessamine.wear.ui.theme.JessamineTheme

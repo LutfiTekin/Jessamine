@@ -11,7 +11,7 @@ val JessamineWearColors = Colors(
     primaryVariant = Color(0xFFB1BFC8),
     secondary = Color(0xFF605542),
     secondaryVariant = Color(0xFFb66c54),
-    background = Color(0xFF22292F),
+    background = Color.Black,
     surface = Color(0xFF2A2D32),
     error = Color(0xFFE2C16E), // repurposed as antique gold
     onPrimary = Color(0xFFB1BFC8),
@@ -31,7 +31,7 @@ fun JessamineTheme(
      * See: https://developer.android.com/jetpack/compose/designsystems/custom
      */
     MaterialTheme(
-
+        colors = JessamineWearColors,
         content = content
     )
 }

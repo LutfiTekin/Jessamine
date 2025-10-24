@@ -32,6 +32,8 @@ import tekin.luetfi.heart.of.jessamine.common.ui.component.PlayToggleOverlay
 import tekin.luetfi.heart.of.jessamine.common.ui.component.initialScreenText
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.PlaybackViewModel
+import tekin.luetfi.heart.of.jessamine.wear.ui.component.CurrentWordDisplay
+import tekin.luetfi.heart.of.jessamine.wear.ui.component.CurvedPlaceLabel
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -97,17 +99,40 @@ fun EchoesScreen(modifier: Modifier = Modifier){
             .focusable(),
         contentAlignment = Alignment.Center
     ) {
+        if (isPlaying){
+            CurrentWordDisplay(
+                modifier = Modifier,
+                player = playbackViewModel.exoPlayer,
+                speechMarks = speechMarks)
+            CurvedPlaceLabel(currentPlace)
+        }else {
+            currentPlace?.let { place ->
+                Text(
+                    modifier = modifier,
+                    text = place.name.uppercase(),
+                    style = MaterialTheme.typography.caption1,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
 
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp)
-                .align(Alignment.Center),
-            text = screenText,
-            style = MaterialTheme.typography.caption1,
-            fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center
-        )
+
+
+        if (initialState){
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+                    .align(Alignment.Center),
+                text = screenText,
+                style = MaterialTheme.typography.caption1,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+        }
+
+
 
         PlayToggleOverlay(
             initialState = initialState,

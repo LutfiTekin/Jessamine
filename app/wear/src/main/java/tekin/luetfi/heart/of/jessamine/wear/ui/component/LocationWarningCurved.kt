@@ -16,6 +16,7 @@ import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.curvedText
 import tekin.luetfi.heart.of.jessamine.common.ui.component.locationWarningText
+import tekin.luetfi.heart.of.jessamine.wear.util.isRoundDevice
 
 @Composable
 fun LocationWarningCurved() {
@@ -44,8 +45,3 @@ fun LocationWarningCurved() {
     }
 }
 
-@Composable
-fun isRoundDevice(): Boolean {
-    val configuration = LocalConfiguration.current
-    return configuration.isScreenRound
-}
