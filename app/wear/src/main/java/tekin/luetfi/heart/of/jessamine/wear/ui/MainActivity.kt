@@ -5,42 +5,26 @@
 
 package tekin.luetfi.heart.of.jessamine.wear.ui
 
-import android.content.pm.PackageManager
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
 import androidx.wear.tooling.preview.devices.WearDevices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
-import tekin.luetfi.heart.of.jessamine.common.data.model.Place
 import tekin.luetfi.heart.of.jessamine.common.di.LocationPermissionFlow
-import tekin.luetfi.heart.of.jessamine.common.ui.component.initialScreenText
-import tekin.luetfi.heart.of.jessamine.common.util.LOCATION_PERMISSION_REQUEST_CODE
-import tekin.luetfi.heart.of.jessamine.common.util.requestLocationPermission
-import tekin.luetfi.heart.of.jessamine.wear.ui.component.CurvedPlaceLabel
 import tekin.luetfi.heart.of.jessamine.wear.ui.component.LocationWarningCurved
 import tekin.luetfi.heart.of.jessamine.wear.ui.screen.EchoesScreen
 import tekin.luetfi.heart.of.jessamine.wear.ui.theme.JessamineTheme
-import tekin.luetfi.simple.map.hasLocationPermission
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,16 +41,23 @@ class MainActivity : ComponentActivity() {
 
         setTheme(android.R.style.Theme_DeviceDefault)
         setContent {
-            val hasPermission by locationPermission.collectAsStateWithLifecycle()
-            WearApp(hasPermission)
-            if (!hasPermission) {
+            val hasLocationPermission by locationPermission.collectAsStateWithLifecycle()
+            if (hasLocationPermission){
+                bodySensorsPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.BODY_SENSORS
+                    )
+                )
+            }
+            WearApp(hasLocationPermission)
+            if (!hasLocationPermission) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable {
                             locationPermissionLauncher.launch(
                                 arrayOf(
-                                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                                    Manifest.permission.ACCESS_FINE_LOCATION
                                 )
                             )
                         }) { }
@@ -86,6 +77,14 @@ class MainActivity : ComponentActivity() {
         // Update your shared flow with the result
         locationPermission.value = granted
     }
+
+    private val bodySensorsPermissionLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        // Handle the result here
+        val granted = permissions.entries.all { it.value } // Check if ALL permissions are granted
+    }
+
 
 
 }

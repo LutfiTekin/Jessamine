@@ -12,11 +12,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
@@ -34,11 +34,13 @@ import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.PlaybackViewModel
 import tekin.luetfi.heart.of.jessamine.wear.ui.component.CurrentWordDisplay
 import tekin.luetfi.heart.of.jessamine.wear.ui.component.CurvedPlaceLabel
+import tekin.luetfi.heart.of.jessamine.wear.ui.component.PulseEffect
 import tekin.luetfi.heart.of.jessamine.wear.ui.component.RotarySeekOverlay
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun EchoesScreen(modifier: Modifier = Modifier){
+
     val focusRequester = remember { FocusRequester() }
     var bezelRotated by remember { mutableIntStateOf(0) }
     val screenText = initialScreenText(bezelRotated)
@@ -112,29 +114,34 @@ fun EchoesScreen(modifier: Modifier = Modifier){
                 focusRequester = focusRequester)
         }else {
             currentPlace?.let { place ->
-                Text(
-                    modifier = modifier,
-                    text = place.name.uppercase(),
-                    style = MaterialTheme.typography.caption1,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center
-                )
+                PulseEffect{
+                    Text(
+                        modifier = it,
+                        text = place.name.uppercase(),
+                        style = MaterialTheme.typography.caption1,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
 
 
 
         if (initialState){
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp)
-                    .align(Alignment.Center),
-                text = screenText,
-                style = MaterialTheme.typography.caption1,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
-            )
+            PulseEffect { modifier ->
+                Text(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .align(Alignment.Center),
+                    text = screenText,
+                    style = MaterialTheme.typography.caption1,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
+            }
+
         }
 
 
