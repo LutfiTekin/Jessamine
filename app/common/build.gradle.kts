@@ -114,23 +114,40 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Jetpack Compose
+    api(libs.androidx.activity.compose)
+    api(platform(libs.androidx.compose.bom))
+    api(libs.androidx.ui.foundation)
+    api(libs.androidx.ui)
+    api(libs.androidx.ui.graphics)
+    api(libs.androidx.ui.tooling.preview)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.constraintlayout.compose)
+    api(libs.androidx.material3)
+    api(libs.androidx.material3.adaptive)
+    api(libs.androidx.material3.adaptive.navigation.suite)
+    api(libs.androidx.material3.icons.extended)
+    api(libs.navigation.compose)
+    api(libs.kotlinx.serialization.json)
+    api(libs.compose.ui.text.google.fonts)
+
 
     //Networking
-    implementation(libs.retrofit)
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.moshi.adapter)
-    implementation(libs.material)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    api(libs.retrofit)
+    api(libs.moshi)
+    api(libs.moshi.kotlin)
+    api(libs.moshi.adapter)
+    api(libs.material)
+    api(libs.androidx.appcompat)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.navigation.fragment.ktx)
+    api(libs.androidx.navigation.ui.ktx)
     ksp(libs.moshi.kotlin.codegen)
-    implementation(libs.retrofit.converter.moshi)
-    implementation(libs.logging.interceptor)
+    api(libs.retrofit.converter.moshi)
+    api(libs.logging.interceptor)
 
     //Data Persistency
-    implementation(libs.datastore.preferences)
+    api(libs.datastore.preferences)
 
     //Media
     api(libs.androidx.media3.exoplayer)

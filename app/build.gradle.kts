@@ -63,40 +63,11 @@ dependencies {
     // AndroidX Core & Lifecycle
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Jetpack Compose
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui.foundation)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material3.adaptive)
-    implementation(libs.androidx.material3.adaptive.navigation.suite)
-    implementation(libs.androidx.material3.icons.extended)
-    implementation(libs.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.compose.ui.text.google.fonts)
-
-
-    //Networking
-    implementation(libs.retrofit)
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.moshi.adapter)
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    ksp(libs.moshi.kotlin.codegen)
-    implementation(libs.retrofit.converter.moshi)
-    implementation(libs.logging.interceptor)
 
-    //Data Persistency
-    implementation(libs.datastore.preferences)
 
 
     //Dependency Injection - Hilt
@@ -104,6 +75,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.moshi.kotlin.codegen)
 
 
 
