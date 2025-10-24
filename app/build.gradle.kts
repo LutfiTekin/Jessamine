@@ -1,55 +1,6 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.util.Properties
-import kotlin.apply
-
-fun Project.readSecret(
-    key: String,
-    default: String = "YOUR_OPEN_AI_KEY"
-): String {
-    // 1) local.properties at project root
-    val localFile = File(rootDir, "local.properties")
-    if (localFile.exists()) {
-        Properties().apply {
-            localFile.inputStream().use { load(it) }
-            getProperty(key)?.let { return it }
-        }
-    }
-    // 2) Environment variable
-    System.getenv(key)?.let { return it }
-    // 3) gradle.properties or -Pkey=...
-    (findProperty(key) as String?)?.let { return it }
-    // 4) Fallback
-    return default
-}
-
-val openRouterAiKey = project.readSecret("OPENROUTERAI_API_KEY", "YOUR_OPENROUTERAI_API_KEY")
-val speechifyKey = project.readSecret("SPEECHIFY_API_KEY", "YOUR_SPEECHIFY_API_KEY")
-
-fun ApplicationDefaultConfig.populateBuildConfigFields(){
-    /**
-     * Endpoints
-     */
-    buildConfigField("String", "OPENROUTERAI_API", "\"https://openrouter.ai/api/v1/\"")
-    buildConfigField("String", "SPEECHIFY_API", "\"https://api.sws.speechify.com/\"")
-    buildConfigField("String", "WIKIPEDIA_API", "\"https://en.wikipedia.org/\"")
-
-    /**
-     * API Keys
-     */
-    buildConfigField("String", "OPENROUTERAI_API_KEY", "\"$openRouterAiKey\"")
-    buildConfigField("String", "SPEECHIFY_API_KEY", "\"$speechifyKey\"")
-
-    /**
-     * Other
-     */
-    buildConfigField("String", "OPEN_ROUTER_APP_NAME", "\"Jessamine\"")
-    buildConfigField("String", "APP_USER_AGENT", "\"Jessamine/1.0 (https://github.com/LutfiTekin/Jessamine) OkHttp/4.x\"")
-    buildConfigField("String", "SPEECHIFY_VOICE_ID", "\"lisa\"")
-    buildConfigField("String", "LLM_MODEL", "\"google/gemini-2.0-flash-001\"")
-}
 
 
 plugins {
@@ -74,8 +25,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
-        populateBuildConfigFields()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -156,9 +105,7 @@ dependencies {
     ksp(libs.hilt.ext.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    //Media
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.session)
+
 
 
     // Testing
@@ -172,5 +119,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(project(":app:map"))
+    implementation(project(":app:common"))
 }

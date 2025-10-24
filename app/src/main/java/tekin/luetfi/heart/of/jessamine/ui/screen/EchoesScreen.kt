@@ -35,7 +35,7 @@ import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
 import tekin.luetfi.heart.of.jessamine.ui.component.PlayToggleOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
-import tekin.luetfi.heart.of.jessamine.util.beatDurationMillis
+import tekin.luetfi.heart.of.jessamine.common.util.beatDurationMillis
 import kotlin.text.uppercase
 import kotlin.time.Duration.Companion.seconds
 

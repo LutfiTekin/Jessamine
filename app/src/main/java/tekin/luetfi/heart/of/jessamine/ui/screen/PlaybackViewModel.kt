@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tekin.luetfi.heart.of.jessamine.util.environmentalReverbStereo
+import tekin.luetfi.heart.of.jessamine.common.util.environmentalReverbStereo
 import javax.inject.Inject
 
 @HiltViewModel

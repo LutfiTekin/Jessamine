@@ -18,6 +18,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import tekin.luetfi.heart.of.jessamine.common.di.ApplicationScope
+import tekin.luetfi.heart.of.jessamine.common.di.CurrentLocationFlow
+import tekin.luetfi.heart.of.jessamine.common.di.LocationPermissionFlow
 import tekin.luetfi.simple.map.currentLocation
 import tekin.luetfi.simple.map.data.model.Coordinates
 import tekin.luetfi.simple.map.hasLocationPermission

@@ -14,8 +14,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import tekin.luetfi.heart.of.jessamine.R
-import tekin.luetfi.heart.of.jessamine.util.DEFAULT_BEAT_DURATION_MILLIS
-import tekin.luetfi.heart.of.jessamine.util.isCloseTo
+import tekin.luetfi.heart.of.jessamine.common.util.DEFAULT_BEAT_DURATION_MILLIS
+import tekin.luetfi.heart.of.jessamine.common.util.isCloseTo
 
 @Composable
 fun HeartbeatEffect(

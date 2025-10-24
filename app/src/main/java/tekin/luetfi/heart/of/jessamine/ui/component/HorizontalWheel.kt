@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tekin.luetfi.heart.of.jessamine.common.data.model.Confirmation
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.pow
@@ -196,8 +197,4 @@ fun wheelAlpha(distanceFromCenter: Int): Float {
     }
 }
 
-data class Confirmation(val finalText: String = "", private val items: List<String> = emptyList()){
-    val list: List<String>
-        get() = (items + listOf(finalText)).toSet().shuffled().toList()
-}
 
