@@ -22,18 +22,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
-import tekin.luetfi.heart.of.jessamine.R
+import tekin.luetfi.heart.of.jessamine.common.ui.component.initialScreenText
+import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
+import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.PlaybackViewModel
 import tekin.luetfi.heart.of.jessamine.ui.component.AnimatedConfirmation
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
-import tekin.luetfi.heart.of.jessamine.ui.component.PlayToggleOverlay
+import tekin.luetfi.heart.of.jessamine.common.ui.component.PlayToggleOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
 import tekin.luetfi.heart.of.jessamine.common.util.beatDurationMillis
 import kotlin.text.uppercase
@@ -43,15 +44,15 @@ import kotlin.time.Duration.Companion.seconds
 fun EchoesScreen(modifier: Modifier) {
 
     //region ViewModels and States
-    val viewModel: EchoesViewModel = hiltViewModel()
+    val echoesViewModel: EchoesViewModel = hiltViewModel()
     val playbackViewModel: PlaybackViewModel = hiltViewModel()
     val isPlaying by playbackViewModel.isPlaying.collectAsStateWithLifecycle()
     val isMediaSectionActive by playbackViewModel.isMediaSessionActive.collectAsStateWithLifecycle()
-    val currentCoordinates by viewModel.currentCoordinates.collectAsStateWithLifecycle()
-    val audioData by viewModel.audioData.collectAsStateWithLifecycle()
-    val speechMarks by viewModel.speechMarks.collectAsStateWithLifecycle()
-    val currentPlace by viewModel.currentPlace.collectAsStateWithLifecycle(null)
-    val bytes by viewModel.bytesAccumulated.collectAsState()
+    val currentCoordinates by echoesViewModel.currentCoordinates.collectAsStateWithLifecycle()
+    val audioData by echoesViewModel.audioData.collectAsStateWithLifecycle()
+    val speechMarks by echoesViewModel.speechMarks.collectAsStateWithLifecycle()
+    val currentPlace by echoesViewModel.currentPlace.collectAsStateWithLifecycle(null)
+    val bytes by echoesViewModel.bytesAccumulated.collectAsState()
     val activity = LocalActivity.current
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     var isPlaceNameSettled by rememberSaveable { mutableStateOf(false) }
@@ -70,7 +71,7 @@ fun EchoesScreen(modifier: Modifier) {
     fun resetUI() {
         playbackViewModel.exoPlayer.clearMediaItems()
         isPlaceNameSettled = false
-        viewModel.reset()
+        echoesViewModel.reset()
     }
 
     LaunchedEffect(isMediaSectionActive) {
@@ -163,7 +164,7 @@ fun EchoesScreen(modifier: Modifier) {
         PlayToggleOverlay(
             initialState = initialState,
             onStart = {
-                viewModel.getLocationLore(currentCoordinates)
+                echoesViewModel.getLocationLore(currentCoordinates)
             },
             onReset = {
                 resetUI()
@@ -181,24 +182,6 @@ fun EchoesScreen(modifier: Modifier) {
     //endregion
 
 }
-
-//region Helper Functions
-@Composable
-fun initialScreenText(): String {
-    return arrayOf(
-        stringResource(R.string.unseal_the_truth),
-        stringResource(R.string.the_stone_remembers),
-        stringResource(R.string.let_the_rot_speak),
-        stringResource(R.string.hear_the_echoes),
-        stringResource(R.string.open_my_eye),
-        stringResource(R.string.the_sin_is_deep),
-        stringResource(R.string.the_secrets_await),
-        stringResource(R.string.let_the_silence_break),
-        stringResource(R.string.the_walls_bleed_memory),
-        stringResource(R.string.draw_the_story_out)
-    ).random().uppercase()
-}
-//endregion
 
 
 
