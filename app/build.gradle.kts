@@ -1,55 +1,6 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.util.Properties
-import kotlin.apply
-
-fun Project.readSecret(
-    key: String,
-    default: String = "YOUR_OPEN_AI_KEY"
-): String {
-    // 1) local.properties at project root
-    val localFile = File(rootDir, "local.properties")
-    if (localFile.exists()) {
-        Properties().apply {
-            localFile.inputStream().use { load(it) }
-            getProperty(key)?.let { return it }
-        }
-    }
-    // 2) Environment variable
-    System.getenv(key)?.let { return it }
-    // 3) gradle.properties or -Pkey=...
-    (findProperty(key) as String?)?.let { return it }
-    // 4) Fallback
-    return default
-}
-
-val openRouterAiKey = project.readSecret("OPENROUTERAI_API_KEY", "YOUR_OPENROUTERAI_API_KEY")
-val speechifyKey = project.readSecret("SPEECHIFY_API_KEY", "YOUR_SPEECHIFY_API_KEY")
-
-fun ApplicationDefaultConfig.populateBuildConfigFields(){
-    /**
-     * Endpoints
-     */
-    buildConfigField("String", "OPENROUTERAI_API", "\"https://openrouter.ai/api/v1/\"")
-    buildConfigField("String", "SPEECHIFY_API", "\"https://api.sws.speechify.com/\"")
-    buildConfigField("String", "WIKIPEDIA_API", "\"https://en.wikipedia.org/\"")
-
-    /**
-     * API Keys
-     */
-    buildConfigField("String", "OPENROUTERAI_API_KEY", "\"$openRouterAiKey\"")
-    buildConfigField("String", "SPEECHIFY_API_KEY", "\"$speechifyKey\"")
-
-    /**
-     * Other
-     */
-    buildConfigField("String", "OPEN_ROUTER_APP_NAME", "\"Jessamine\"")
-    buildConfigField("String", "APP_USER_AGENT", "\"Jessamine/1.0 (https://github.com/LutfiTekin/Jessamine) OkHttp/4.x\"")
-    buildConfigField("String", "SPEECHIFY_VOICE_ID", "\"lisa\"")
-    buildConfigField("String", "LLM_MODEL", "\"google/gemini-2.0-flash-001\"")
-}
 
 
 plugins {
@@ -74,8 +25,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
-        populateBuildConfigFields()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -114,51 +63,20 @@ dependencies {
     // AndroidX Core & Lifecycle
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Jetpack Compose
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui.foundation)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material3.adaptive)
-    implementation(libs.androidx.material3.adaptive.navigation.suite)
-    implementation(libs.androidx.material3.icons.extended)
-    implementation(libs.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.compose.ui.text.google.fonts)
-
-
-    //Networking
-    implementation(libs.retrofit)
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.moshi.adapter)
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    ksp(libs.moshi.kotlin.codegen)
-    implementation(libs.retrofit.converter.moshi)
-    implementation(libs.logging.interceptor)
 
-    //Data Persistency
-    implementation(libs.datastore.preferences)
 
 
     //Dependency Injection - Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.moshi.kotlin.codegen)
 
-    //Media
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.session)
+
 
 
     // Testing
@@ -172,5 +90,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(project(":app:map"))
+    implementation(project(":app:common"))
 }

@@ -1,0 +1,53 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background Circle (Black) --><path
+    android:fillColor="#000000"
+    android:pathData="M54,6 A48,48 0 1,0 54,102 A48,48 0 1,0 54,6 Z"/>
+
+    <!-- Compass Rose Group --><group
+    android:pivotX="54"
+    android:pivotY="54">
+
+    <!-- Outer White Ring --><path
+    android:fillColor="#00000000"
+    android:strokeColor="#FFFFFF"
+    android:strokeWidth="2"
+    android:pathData="M54,18 A36,36 0 1,0 54,90 A36,36 0 1,0 54,18 Z"/>
+
+    <!-- Inner White Ring --><path
+    android:fillColor="#00000000"
+    android:strokeColor="#FFFFFF"
+    android:strokeWidth="2"
+    android:pathData="M54,30 A24,24 0 1,0 54,78 A24,24 0 1,0 54,30 Z"/>
+
+    <!-- Cardinal Points (North, East, South, West) - White Lines --><path
+    android:fillColor="#00000000"
+    android:strokeColor="#FFFFFF"
+    android:strokeWidth="2"
+    android:pathData="M54,18 L54,30 M78,54 L90,54 M54,78 L54,90 M18,54 L30,54"/>
+
+    <!-- Intercardinal Points (NE, SE, SW, NW) - White Lines --><path
+    android:fillColor="#00000000"
+    android:strokeColor="#FFFFFF"
+    android:strokeWidth="2"
+    android:pathData="M62.47,26.47 L70.53,34.53 M70.53,73.53 L62.47,81.53 M37.53,73.53 L34.53,70.53 M34.53,37.53 L26.47,29.47"/>
+
+    <!-- Central Star/Arrowhead (White) --><path
+    android:fillColor="#FFFFFF"
+    android:pathData="M54,38 L62,54 L54,70 L46,54 Z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:rotation="45"
+        android:pathData="M54,38 L62,54 L54,70 L46,54 Z"/>
+
+    <!-- Central Dot (Black, to give a pivot illusion) --><path
+    android:fillColor="#000000"
+    android:pathData="M54,53 A1,1 0 1,0 54,55 A1,1 0 1,0 54,53 Z"/>
+
+</group>
+
+</vector>

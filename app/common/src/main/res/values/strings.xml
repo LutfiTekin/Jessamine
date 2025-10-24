@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unseal_the_truth">Unseal the truth.</string>
+    <string name="the_stone_remembers">The stone remembers.</string>
+    <string name="let_the_rot_speak">Let the rot speak.</string>
+    <string name="hear_the_echoes">Hear the echoes.</string>
+    <string name="open_my_eye">Open my eye.</string>
+    <string name="the_sin_is_deep">The sin is deep.</string>
+    <string name="the_secrets_await">The secrets await.</string>
+    <string name="let_the_silence_break">Let the silence break.</string>
+    <string name="the_walls_bleed_memory">The walls bleed memory.</string>
+    <string name="draw_the_story_out">Draw the story out.</string>
+    <string name="location_denied_1">No tether binds us. I cannot feel where you walk.</string>
+    <string name="location_denied_2">You move through the world unmarked. I cannot trace your steps.</string>
+    <string name="location_denied_3">The threads between us are severed. Your presence fades into silence.</string>
+    <string name="location_denied_4">I reach across the veil… but you are not there.</string>
+    <string name="location_denied_5">The runes do not stir. You are beyond my grasp.</string>
+    <string name="location_denied_6">You walk cloaked in shadow. I am blind to your path.</string>
+</resources>

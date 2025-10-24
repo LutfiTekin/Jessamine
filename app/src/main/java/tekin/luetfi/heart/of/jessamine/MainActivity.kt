@@ -1,6 +1,5 @@
 package tekin.luetfi.heart.of.jessamine
 
-import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,25 +11,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
-import tekin.luetfi.heart.of.jessamine.data.model.Place
-import tekin.luetfi.heart.of.jessamine.di.LocationPermissionFlow
+import tekin.luetfi.heart.of.jessamine.common.data.model.Place
+import tekin.luetfi.heart.of.jessamine.common.di.LocationPermissionFlow
+import tekin.luetfi.heart.of.jessamine.common.util.LOCATION_PERMISSION_REQUEST_CODE
+import tekin.luetfi.heart.of.jessamine.common.util.requestLocationPermission
 import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
-import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesViewModel
+import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.ui.theme.JessamineTheme
 import tekin.luetfi.simple.map.hasLocationPermission
 import tekin.luetfi.simple.map.ui.DynamicBackground
 import javax.inject.Inject
-
-const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -83,15 +79,6 @@ class MainActivity : ComponentActivity() {
 
 }
 
-fun Activity.requestLocationPermission() {
-    if (hasLocationPermission.not()) {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
-        )
-    }
-}
 
 fun Activity.enterFullscreen() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

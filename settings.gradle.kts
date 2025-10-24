@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "Jessamine"
 include(":app")
 include(":app:map")
+include(":app:wear")
+include(":app:common")
