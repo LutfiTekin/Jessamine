@@ -76,7 +76,6 @@ So with that mechanic in mind, I developed an app that attempts to replicate its
 - [Retrofit](https://square.github.io/retrofit/)
 - [OkHttp](https://square.github.io/okhttp/)
 - [Moshi](https://github.com/square/moshi)
-- [Kotlinx Serialization](https://kotlinlang.org/docs/serialization.html)
 
 
 ### Persistence & Local Storage
