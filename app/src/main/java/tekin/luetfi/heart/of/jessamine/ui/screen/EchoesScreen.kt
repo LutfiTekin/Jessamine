@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
+import tekin.luetfi.heart.of.jessamine.common.ui.LocalConnectivityMonitor
 import tekin.luetfi.heart.of.jessamine.common.ui.component.initialScreenText
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.PlaybackViewModel
@@ -35,6 +36,7 @@ import tekin.luetfi.heart.of.jessamine.ui.component.AnimatedConfirmation
 import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.HeartbeatEffect
 import tekin.luetfi.heart.of.jessamine.common.ui.component.PlayToggleOverlay
+import tekin.luetfi.heart.of.jessamine.common.ui.component.locationWarningText
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
 import tekin.luetfi.heart.of.jessamine.common.util.beatDurationMillis
 import kotlin.text.uppercase
@@ -56,6 +58,8 @@ fun EchoesScreen(modifier: Modifier) {
     val activity = LocalActivity.current
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     var isPlaceNameSettled by rememberSaveable { mutableStateOf(false) }
+    val connectivityMonitor = LocalConnectivityMonitor.current
+    val isConnected by connectivityMonitor.isConnected.collectAsStateWithLifecycle()
 
     val initialState by remember(isMediaSectionActive, currentPlace) {
         derivedStateOf {
@@ -98,7 +102,7 @@ fun EchoesScreen(modifier: Modifier) {
     //region Back Handler
     BackHandler {
         resetUI()
-        if (initialState){
+        if (initialState) {
             playbackViewModel.clearPlayer()
             activity?.finishAffinity()
         }
@@ -154,10 +158,10 @@ fun EchoesScreen(modifier: Modifier) {
                     .fillMaxWidth()
                     .padding(24.dp)
                     .align(Alignment.Center),
-                text = initialScreenText(),
+                text = if (isConnected) initialScreenText() else locationWarningText(),
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = if (isConnected) FontWeight.SemiBold else FontWeight.Normal,
+                color = if (isConnected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center
             )
         }
