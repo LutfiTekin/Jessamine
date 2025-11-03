@@ -1,6 +1,7 @@
 package tekin.luetfi.heart.of.jessamine.common.domain.usecase
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -15,7 +16,6 @@ import tekin.luetfi.heart.of.jessamine.common.util.placeNameSettleAnimationDurat
 import tekin.luetfi.simple.map.data.model.Coordinates
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.coroutines.coroutineContext
 
 class GetLocationLoreUseCase @Inject constructor(
     private val placeService: PlaceService,
@@ -36,12 +36,12 @@ class GetLocationLoreUseCase @Inject constructor(
                 return
             }
             locationInfoRepository.updatePlace(place)
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             val lore = llmService.getLore(place) ?: run {
                 locationInfoRepository.reset()
                 return
             }
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             val speechResponse = ttsService.synthesize(lore)
             locationInfoRepository.updateSpeech(speechResponse)
             cacheService.cacheVisitedPlace(speechResponse, place)

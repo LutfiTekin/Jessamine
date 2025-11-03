@@ -54,12 +54,12 @@ object AppModule {
         val gated = permissionFlow
             .flatMapLatest { granted ->
                 println("Granted: $granted")
-                if (granted) app.currentLocation() else flowOf(Coordinates.Companion.majorCities.random())
+                if (granted) app.currentLocation() else flowOf(Coordinates.majorCities.random())
             }
         return gated.stateIn(
             scope = scope,
-            started = SharingStarted.Companion.WhileSubscribed(stopTimeoutMillis = 5_000),
-            initialValue = Coordinates.Companion.majorCities.random()
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
+            initialValue = Coordinates.majorCities.random()
         )
     }
 
