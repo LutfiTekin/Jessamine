@@ -9,8 +9,6 @@ import tekin.luetfi.heart.of.jessamine.common.domain.service.PlaceService
 import tekin.luetfi.heart.of.jessamine.common.util.fallbackPlaces
 import tekin.luetfi.heart.of.jessamine.common.util.geoSearchString
 import tekin.luetfi.simple.map.data.model.Coordinates
-import kotlin.collections.orEmpty
-import kotlin.coroutines.coroutineContext
 
 class DefaultPlaceService(private val mediaWikiApi: MediaWikiApi): PlaceService {
 
@@ -55,7 +53,7 @@ class DefaultPlaceService(private val mediaWikiApi: MediaWikiApi): PlaceService 
         )
 
         val description = getMoreContextAbout(place)
-        coroutineContext.ensureActive()
+        currentCoroutineContext().ensureActive()
         return place.copy(description = description)
     }
 

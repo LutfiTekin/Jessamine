@@ -5,9 +5,6 @@ data class SpeechData(
     val speechMarks: SpeechMarks?
 ){
 
-
-
-
     companion object{
         fun SpeechResponse.toSpeechData(): SpeechData{
             return SpeechData(

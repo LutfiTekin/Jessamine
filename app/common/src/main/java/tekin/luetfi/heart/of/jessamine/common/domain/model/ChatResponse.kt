@@ -32,7 +32,7 @@ data class ChatCompletionResponse(
     fun String.getFirstJsonObject(): String? {
         val start = indexOf('{')
         val end = lastIndexOf('}')
-        return if (start >= 0 && end > start) substring(start, end + 1) else null
+        return if (start in 0..<end) substring(start, end + 1) else null
     }
 
     @OptIn(ExperimentalStdlibApi::class)
