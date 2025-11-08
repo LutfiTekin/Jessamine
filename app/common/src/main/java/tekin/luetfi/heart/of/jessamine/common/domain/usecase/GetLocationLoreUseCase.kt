@@ -6,7 +6,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.common.data.model.Place
-import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechResponse
+import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechData
+import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechData.Companion.toSpeechData
 import tekin.luetfi.heart.of.jessamine.common.domain.repository.LocationInfoRepository
 import tekin.luetfi.heart.of.jessamine.common.domain.service.LLMService
 import tekin.luetfi.heart.of.jessamine.common.domain.service.CacheService
@@ -42,9 +43,9 @@ class GetLocationLoreUseCase @Inject constructor(
                 return
             }
             currentCoroutineContext().ensureActive()
-            val speechResponse = ttsService.synthesize(lore)
-            locationInfoRepository.updateSpeech(speechResponse)
-            cacheService.cacheVisitedPlace(speechResponse, place)
+            val speechData = ttsService.synthesize(lore).toSpeechData()
+            locationInfoRepository.updateSpeech(speechData)
+            cacheService.cacheVisitedPlace(speechData, place)
         } catch (e: Exception) {
             locationInfoRepository.reset()
             if (e is CancellationException) throw e
@@ -56,7 +57,7 @@ class GetLocationLoreUseCase @Inject constructor(
         if (cacheService.isCacheHit(place.key).not())
             return false
         try {
-            val (place: Place, speechResponse: SpeechResponse) =
+            val (place: Place, speechResponse: SpeechData) =
                 cacheService.reconstructFromCache(place.key).entries.first()
             locationInfoRepository.updatePlace(place)
             // Wait before loading speech to stay synchronized with the heartbeat effect

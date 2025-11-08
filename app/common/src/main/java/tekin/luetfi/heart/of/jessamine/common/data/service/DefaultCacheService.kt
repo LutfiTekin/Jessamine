@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tekin.luetfi.heart.of.jessamine.common.data.model.Place
+import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechData
 import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechMarks
-import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechResponse
 import tekin.luetfi.heart.of.jessamine.common.domain.service.CacheService
 import tekin.luetfi.heart.of.jessamine.common.util.PLACE
 import tekin.luetfi.heart.of.jessamine.common.util.SPEECH_MARKS
@@ -38,15 +38,15 @@ class DefaultCacheService(
      * The audio is not urgently saved to cache.
      * We will use the audio data from the memory for initial playback
      */
-    override fun cacheVisitedPlace(speechResponse: SpeechResponse, place: Place) {
+    override fun cacheVisitedPlace(speechData: SpeechData, place: Place) {
         scope.launch {
             try {
-                val audioBytes = Base64.decode(speechResponse.audioData, Base64.NO_WRAP)
+                val audioBytes = Base64.decode(speechData.audioData, Base64.NO_WRAP)
                 val audioFile = File(context.cacheDir, place.key)
                 audioFile.writeBytes(audioBytes)
                 val metadata = buildMap {
                     put(PLACE, placeAdapter.toJson(place))
-                    speechResponse.speechMarks?.let {
+                    speechData.speechMarks?.let {
                         put(SPEECH_MARKS, speechMarksAdapter.toJson(it))
                     }
                 }
@@ -64,7 +64,7 @@ class DefaultCacheService(
 
     }
 
-    override suspend fun reconstructFromCache(placeKey: String): Map<Place, SpeechResponse> {
+    override suspend fun reconstructFromCache(placeKey: String): Map<Place, SpeechData> {
         return withContext(Dispatchers.IO) {
             val audioFile = File(context.cacheDir, placeKey)
             if (!audioFile.exists()) {
@@ -89,7 +89,7 @@ class DefaultCacheService(
             val place = placeAdapter.fromJson(placeJson) ?: throw IllegalStateException("Failed to parse place")
             val speechMarks = speechMarksJson?.let { speechMarksAdapter.fromJson(it) }
 
-            val speechResponse = SpeechResponse(
+            val speechResponse = SpeechData(
                 audioData = audioBase64,
                 speechMarks = speechMarks
             )

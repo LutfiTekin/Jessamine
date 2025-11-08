@@ -1,5 +1,6 @@
 package tekin.luetfi.heart.of.jessamine.common.data.service
 
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import tekin.luetfi.heart.of.jessamine.common.data.model.Confirmation
 import tekin.luetfi.heart.of.jessamine.common.data.model.Place
@@ -22,7 +23,7 @@ class DefaultPlaceService(private val mediaWikiApi: MediaWikiApi): PlaceService 
             e.printStackTrace()
             return Place.unknown(coordinates)
         }
-        coroutineContext.ensureActive()
+        currentCoroutineContext().ensureActive()
         val geoSearchItem = try {
             geoQuery.query?.geoSearch?.random()
         } catch (e: Exception) {

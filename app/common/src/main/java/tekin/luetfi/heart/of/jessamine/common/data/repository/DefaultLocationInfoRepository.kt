@@ -3,13 +3,13 @@ package tekin.luetfi.heart.of.jessamine.common.data.repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tekin.luetfi.heart.of.jessamine.common.data.model.Place
-import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechResponse
+import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechData
 import tekin.luetfi.heart.of.jessamine.common.domain.repository.LocationInfoRepository
 
 
 class DefaultLocationInfoRepository() : LocationInfoRepository {
 
-    private val _speechData = MutableStateFlow<SpeechResponse?>(null)
+    private val _speechData = MutableStateFlow<SpeechData?>(null)
     override val speechData = _speechData.asStateFlow()
 
     private val _currentPlace = MutableStateFlow<Place?>(null)
@@ -25,7 +25,7 @@ class DefaultLocationInfoRepository() : LocationInfoRepository {
         _currentPlace.emit(place)
     }
 
-    override suspend fun updateSpeech(speech: SpeechResponse) {
+    override suspend fun updateSpeech(speech: SpeechData) {
         _speechData.emit(speech)
     }
 

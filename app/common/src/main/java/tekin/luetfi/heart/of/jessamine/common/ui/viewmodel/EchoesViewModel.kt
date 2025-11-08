@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import tekin.luetfi.heart.of.jessamine.common.data.model.Place
 import tekin.luetfi.heart.of.jessamine.common.di.CurrentLocationFlow
+import tekin.luetfi.heart.of.jessamine.common.domain.model.SpeechData.Companion.formattedSpeechMarks
 import tekin.luetfi.heart.of.jessamine.common.domain.repository.LocationInfoRepository
 import tekin.luetfi.heart.of.jessamine.common.domain.usecase.GetLocationLoreUseCase
 import tekin.luetfi.heart.of.jessamine.common.util.ByteAccumulationDispatcher
@@ -44,12 +45,7 @@ class EchoesViewModel @Inject constructor(
 
     val speechMarks: StateFlow<List<Triple<Long, Long, String>>> =
         locationInfoRepository.speechData.map { speechData ->
-            speechData?.speechMarks?.chunks?.mapNotNull { chunk ->
-                val startTime = (chunk["start_time"] as? Double)?.toLong() ?: return@mapNotNull null
-                val endTime = (chunk["end_time"] as? Double)?.toLong() ?: return@mapNotNull null
-                val value = chunk["value"] as? String ?: return@mapNotNull null
-                Triple(startTime, endTime, value.uppercase())
-            } ?: emptyList()
+            speechData.formattedSpeechMarks
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
