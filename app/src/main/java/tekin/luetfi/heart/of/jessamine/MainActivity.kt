@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         applyFeatures()
+        this.isQuizModeEnabled()
         setContent {
             JessamineTheme {
                 val hasPermission by locationPermission.collectAsStateWithLifecycle()

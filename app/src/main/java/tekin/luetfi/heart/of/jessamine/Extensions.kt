@@ -9,6 +9,7 @@ import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -16,20 +17,26 @@ import kotlinx.coroutines.launch
 import tekin.luetfi.heart.of.jessamine.common.util.requestLocationPermission
 import tekin.luetfi.simple.map.hasLocationPermission
 
-fun ComponentActivity.installShortcut(){
+fun ComponentActivity.installShortcut() {
     val shortcutManager = getSystemService(ShortcutManager::class.java)
 
+    val shortcutIntent = Intent(this, MainActivity::class.java).apply {
+        action = getString(R.string.action_quiz_mode)
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
+
     val shortcut = ShortcutInfo.Builder(this, "quiz_mode")
-        .setShortLabel("Ordeal")
-        .setLongLabel("The Listener’s Trial")
+        .setShortLabel(getString(R.string.quiz_mode_label_short))
+        .setLongLabel(getString(R.string.quiz_mode_label_long))
         .setIcon(Icon.createWithResource(this, R.mipmap.ic_quiz_launcher))
-        .setIntent(Intent(this, MainActivity::class.java).setAction(Intent.ACTION_VIEW))
+        .setIntent(shortcutIntent)
         .build()
 
-    lifecycleScope.launch(Dispatchers.IO){
+    lifecycleScope.launch(Dispatchers.IO) {
         shortcutManager?.dynamicShortcuts = if (hasLocationPermission) listOf(shortcut) else emptyList()
     }
 }
+
 
 
 fun Activity.enterFullscreen() {
@@ -57,4 +64,13 @@ fun ComponentActivity.applyFeatures(){
     if (hasLocationPermission)
         enterFullscreen()
     installShortcut()
+}
+
+fun Activity.isQuizModeEnabled(){
+    val action = intent?.action
+    if (action == getString(R.string.action_quiz_mode)) {
+        // Handle quiz mode launch here
+        Toast.makeText(this, "Quiz Mode Activated!", Toast.LENGTH_SHORT).show()
+        // You can also navigate to a specific fragment or trigger a feature
+    }
 }

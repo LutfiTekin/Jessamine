@@ -10,4 +10,7 @@
     <string name="let_the_silence_break">Let the silence break.</string>
     <string name="the_walls_bleed_memory">The walls bleed memory.</string>
     <string name="draw_the_story_out">Draw the story out.</string>
+    <string name="action_quiz_mode">heart.of.jessamine.ACTION_QUIZ_MODE</string>
+    <string name="quiz_mode_label_short">Ordeal</string>
+    <string name="quiz_mode_label_long">The Listener’s Trial</string>
 </resources>
