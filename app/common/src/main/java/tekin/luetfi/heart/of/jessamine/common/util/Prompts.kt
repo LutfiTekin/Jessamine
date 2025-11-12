@@ -108,3 +108,44 @@ The glass holds the ghost of a hundred hurried conversations.
 Beneath the scent of beans, the floorboards remember older soil.  
 What debt brought him to this particular stool each dawn?
     """
+
+
+
+fun quizPlacesPrompt(numberOfPlaces: Int = 4, excludedPlaces: List<String> = emptyList()): String {
+    return """
+Generate a list of $numberOfPlaces historically or culturally significant locations around the world. Include both entire cities and specific sites or landmarks, with varied geography and types.
+
+${
+    if (excludedPlaces.isNotEmpty()) {
+        "Exclude the following locations: ${excludedPlaces.joinToString(", ")}"
+    } else {
+        ""
+    }
+}
+
+
+**Output Requirements:**
+- Return ONLY valid, parsable JSON with no additional text
+- Use decimal degrees format for coordinates
+- Use ISO 3166-1 alpha-2 country codes
+- Include brief historical/cultural descriptions
+
+**Required JSON Structure:**
+```json
+{
+  "places": [
+    {
+      "name": "string",
+      "description": "string",
+      "coordinates": {
+        "lat": double,
+        "lon": double,
+        "city": "string",
+        "countryCode": "string"
+      }
+    }
+  ]
+}
+    """.trimIndent()
+
+}
