@@ -1,5 +1,6 @@
 package tekin.luetfi.heart.of.jessamine.ui.screen
 
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -62,7 +63,7 @@ fun TrialsScreen(modifier: Modifier = Modifier) {
     val speechMarks by echoesViewModel.speechMarks.collectAsStateWithLifecycle()
     val currentPlace by echoesViewModel.currentPlace.collectAsStateWithLifecycle(null)
     val isMediaSectionActive by playbackViewModel.isMediaSessionActive.collectAsStateWithLifecycle()
-
+    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val uiState by trialsViewModel.uiState.collectAsStateWithLifecycle()
 
     val initialState by remember(currentPlace) {
@@ -221,7 +222,7 @@ fun TrialsScreen(modifier: Modifier = Modifier) {
                     echoesViewModel.reset()
                 },
                 onFinish = {
-
+                    backDispatcher?.onBackPressed()
                 })
         }
 
