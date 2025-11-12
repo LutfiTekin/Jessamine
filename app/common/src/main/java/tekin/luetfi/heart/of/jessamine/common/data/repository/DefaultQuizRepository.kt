@@ -19,6 +19,7 @@ class DefaultQuizRepository(private val llmService: LLMService) : QuizRepository
         val loadedPlaces = llmService.getPlaces(excludedPlaces)
         val selectedPlaces = loadedPlaces
             .shuffled()
+            .distinctBy { it.name }
             .take(4).map { place ->
                 val confirmation = Confirmation(
                     finalText = place.name,

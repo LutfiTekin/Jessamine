@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -53,38 +54,52 @@ fun AnimatedConfirmation(
 }
 
 @Composable
-fun AnimatedConfirmationIndeterminate(
+fun AnimatedIndeterminateText(
     modifier: Modifier,
     items: List<String>,
+    maxNodes: Int = 10,
     delayBetweenItems: Long = 1000
 ) {
     val scope = rememberCoroutineScope()
 
-    var animationTrigger by remember {
+    var nodes by remember {
         mutableIntStateOf(1)
     }
-    val verdict by remember(animationTrigger) {
-        derivedStateOf {
-            items.shuffled().first()
+
+    LaunchedEffect(Unit) {
+        while (nodes < maxNodes) {
+            delay(delayBetweenItems * 3)
+            nodes++
         }
     }
 
-
-    // Use the passed list, and scroll to show the finalText
-    HorizontalWheelReadOnly(
-        modifier = modifier.padding(vertical = 8.dp),
-        items = items,
-        displayItem = verdict,
-        onAnimationEnd = {
-            scope.launch {
-                delay(delayBetweenItems)
-                animationTrigger++
+    LazyColumn{
+        items(nodes) {
+            var animationTrigger by remember {
+                mutableIntStateOf(1)
             }
+            val verdict by remember(animationTrigger) {
+                derivedStateOf {
+                    items.shuffled().first()
+                }
+            }
+
+
+            // Use the passed list, and scroll to show the finalText
+            HorizontalWheelReadOnly(
+                modifier = modifier.padding(vertical = 8.dp),
+                items = items,
+                displayItem = verdict,
+                onAnimationEnd = {
+                    scope.launch {
+                        delay(delayBetweenItems)
+                        animationTrigger++
+                    }
+                }
+            )
         }
-    )
+    }
 }
-
-
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -157,7 +172,8 @@ fun HorizontalWheelReadOnly(
                     derivedStateOf {
                         val layoutInfo = listState.layoutInfo
                         if (layoutInfo.visibleItemsInfo.isNotEmpty()) {
-                            val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+                            val viewportCenter =
+                                (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
                             // Find the visible item whose center is closest to the viewport center
                             layoutInfo.visibleItemsInfo.minByOrNull { itemInfo ->
                                 abs((itemInfo.offset + itemInfo.size / 2) - viewportCenter)
