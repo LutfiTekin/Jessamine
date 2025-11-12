@@ -9,7 +9,6 @@ import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +30,6 @@ fun ComponentActivity.installShortcut() {
         .setIcon(Icon.createWithResource(this, R.mipmap.ic_quiz_launcher))
         .setIntent(shortcutIntent)
         .build()
-
     lifecycleScope.launch(Dispatchers.IO) {
         shortcutManager?.dynamicShortcuts = if (hasLocationPermission) listOf(shortcut) else emptyList()
     }
@@ -66,11 +64,5 @@ fun ComponentActivity.applyFeatures(){
     installShortcut()
 }
 
-fun Activity.isQuizModeEnabled(){
-    val action = intent?.action
-    if (action == getString(R.string.action_quiz_mode)) {
-        // Handle quiz mode launch here
-        Toast.makeText(this, "Quiz Mode Activated!", Toast.LENGTH_SHORT).show()
-        // You can also navigate to a specific fragment or trigger a feature
-    }
-}
+val Activity.quizMode: Boolean
+    get() = (intent?.action == getString(R.string.action_quiz_mode))

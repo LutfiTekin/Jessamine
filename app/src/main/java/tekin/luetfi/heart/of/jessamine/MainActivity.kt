@@ -19,10 +19,9 @@ import tekin.luetfi.heart.of.jessamine.common.ui.LocalConnectivityMonitor
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.common.util.ConnectivityMonitor
 import tekin.luetfi.heart.of.jessamine.common.util.LOCATION_PERMISSION_REQUEST_CODE
-import tekin.luetfi.heart.of.jessamine.common.util.requestLocationPermission
 import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
+import tekin.luetfi.heart.of.jessamine.ui.screen.TrialsScreen
 import tekin.luetfi.heart.of.jessamine.ui.theme.JessamineTheme
-import tekin.luetfi.simple.map.hasLocationPermission
 import tekin.luetfi.simple.map.ui.DynamicBackground
 import javax.inject.Inject
 
@@ -42,7 +41,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         applyFeatures()
-        this.isQuizModeEnabled()
+
         setContent {
             JessamineTheme {
                 val hasPermission by locationPermission.collectAsStateWithLifecycle()
@@ -55,9 +54,19 @@ class MainActivity : ComponentActivity() {
                         hasLocationPermission = hasPermission,
                         focusedCoordinates = currentPlace?.coordinates
                     )
-                    EchoesScreen(modifier = Modifier.fillMaxSize())
+                    if (quizMode)
+                        TrialsScreen(modifier = Modifier.fillMaxSize())
+                    else
+                        EchoesScreen(modifier = Modifier.fillMaxSize())
                 }
             }
+        }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (quizMode){
+            this.finishAffinity()
         }
     }
 
@@ -73,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
         locationPermission.value = granted
         if (granted)
-            enterFullscreen()
+            applyFeatures()
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
     }
