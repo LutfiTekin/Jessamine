@@ -27,12 +27,27 @@ class GetLocationLoreUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(coordinates: Coordinates) {
+        processPlaceInformation {
+            resolvePlace(coordinates)
+        }
+    }
+
+    suspend operator fun invoke(place: Place){
+        processPlaceInformation {
+            place
+        }
+    }
+
+    private suspend fun resolvePlace(coordinates: Coordinates): Place {
+        val place = placeService.selectPlace(coordinates)
+        return if (place.name == Place.UNKNOWN) {
+            loadRandomCachedPlace(place.coordinates ?: coordinates)
+        } else place
+    }
+
+    private suspend fun processPlaceInformation(loadedPlace: suspend () -> Place){
         try {
-            var place: Place = placeService.selectPlace(coordinates)
-            if (place.name == Place.UNKNOWN){
-                //Try cached places
-                place = loadRandomCachedPlace(fallbackCoordinates = coordinates)
-            }
+            val place = loadedPlace()
             if (cacheHit(place)) {
                 return
             }

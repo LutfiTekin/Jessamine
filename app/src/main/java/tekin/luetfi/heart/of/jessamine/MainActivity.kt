@@ -1,12 +1,7 @@
 package tekin.luetfi.heart.of.jessamine
 
-import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,14 +16,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import tekin.luetfi.heart.of.jessamine.common.data.model.Place
 import tekin.luetfi.heart.of.jessamine.common.di.LocationPermissionFlow
 import tekin.luetfi.heart.of.jessamine.common.ui.LocalConnectivityMonitor
-import tekin.luetfi.heart.of.jessamine.common.util.LOCATION_PERMISSION_REQUEST_CODE
-import tekin.luetfi.heart.of.jessamine.common.util.requestLocationPermission
-import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.common.util.ConnectivityMonitor
-import tekin.luetfi.heart.of.jessamine.common.util.NetworkMonitor
+import tekin.luetfi.heart.of.jessamine.common.util.LOCATION_PERMISSION_REQUEST_CODE
+import tekin.luetfi.heart.of.jessamine.ui.screen.EchoesScreen
+import tekin.luetfi.heart.of.jessamine.ui.screen.TrialsScreen
 import tekin.luetfi.heart.of.jessamine.ui.theme.JessamineTheme
-import tekin.luetfi.simple.map.hasLocationPermission
 import tekin.luetfi.simple.map.ui.DynamicBackground
 import javax.inject.Inject
 
@@ -47,24 +40,33 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        requestLocationPermission()
-        if (hasLocationPermission)
-            enterFullscreen()
+        applyFeatures()
+
         setContent {
             JessamineTheme {
                 val hasPermission by locationPermission.collectAsStateWithLifecycle()
                 val echoesViewModel: EchoesViewModel = hiltViewModel()
-                val currentPlace: Place? by echoesViewModel.currentPlace.collectAsStateWithLifecycle(
-                    Place(""))
+                val currentPlace: Place? by echoesViewModel.currentPlace
+                    .collectAsStateWithLifecycle(Place.zero())
                 CompositionLocalProvider(LocalConnectivityMonitor provides connectivityMonitor) {
                     DynamicBackground(
                         modifier = Modifier,
                         hasLocationPermission = hasPermission,
                         focusedCoordinates = currentPlace?.coordinates
                     )
-                    EchoesScreen(modifier = Modifier.fillMaxSize())
+                    if (quizMode)
+                        TrialsScreen(modifier = Modifier.fillMaxSize())
+                    else
+                        EchoesScreen(modifier = Modifier.fillMaxSize())
                 }
             }
+        }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (quizMode){
+            this.finishAffinity()
         }
     }
 
@@ -80,30 +82,9 @@ class MainActivity : ComponentActivity() {
 
         locationPermission.value = granted
         if (granted)
-            enterFullscreen()
+            applyFeatures()
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
     }
 
-}
-
-
-fun Activity.enterFullscreen() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        // Instead of setDecorFitsSystemWindows, use WindowInsetsController directly
-        window.insetsController?.apply {
-            hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-    } else {
-        @Suppress("DEPRECATION")
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                )
-    }
 }

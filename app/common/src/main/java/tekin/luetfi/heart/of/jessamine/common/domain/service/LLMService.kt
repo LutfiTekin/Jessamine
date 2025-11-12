@@ -6,4 +6,5 @@ interface LLMService {
 
     suspend fun getLore(place: Place): String?
 
+    suspend fun getPlaces(excludedPlaces: List<String>): List<Place>
 }

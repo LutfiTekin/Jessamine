@@ -62,6 +62,15 @@ class EchoesViewModel @Inject constructor(
         }
     }
 
+    fun getLocationLore(place: Place) {
+        viewModelScope.launch {
+            loreJob?.cancelAndJoin()
+            loreJob = launch {
+                getLoreUseCase(place)
+            }
+        }
+    }
+
     fun reset() {
         locationInfoRepository.reset()
         loreJob?.cancel()

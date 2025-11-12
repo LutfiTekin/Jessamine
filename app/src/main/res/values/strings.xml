@@ -10,4 +10,44 @@
     <string name="let_the_silence_break">Let the silence break.</string>
     <string name="the_walls_bleed_memory">The walls bleed memory.</string>
     <string name="draw_the_story_out">Draw the story out.</string>
+    <string name="action_quiz_mode">heart.of.jessamine.ACTION_QUIZ_MODE</string>
+    <string name="quiz_mode_label_short">Ordeal</string>
+    <string name="quiz_mode_label_long">The Listener’s Trial</string>
+
+    <string name="trace_the_forgotten_lines">Trace the forgotten lines.</string>
+    <string name="sift_through_the_ashes">Sift through the ashes.</string>
+    <string name="the_past_whispers_back">The past whispers back.</string>
+    <string name="unlock_the_shrouded_truth">Unlock the shrouded truth.</string>
+    <string name="follow_the_cracks">Follow the cracks.</string>
+    <string name="the_dust_knows_all">The dust knows all.</string>
+    <string name="dig_where_the_light_fades">Dig where the light fades.</string>
+    <string name="the_echo_never_lies">The echo never lies.</string>
+    <string name="read_the_wounds">Read the wounds.</string>
+    <string name="the_truth_bleeds_through">The truth bleeds through.</string>
+
+    <string name="it_stirs_beneath">Something is awakening below the surface.</string>
+    <string name="the_shape_reveals">A hidden form begins to emerge.</string>
+    <string name="you_were_not_forgotten">You have not been forgotten.</string>
+    <string name="the_pattern_accepts">The design welcomes your presence.</string>
+    <string name="it_remembers_you">It recognizes and remembers you.</string>
+    <string name="the_gate_shifted">The gate has moved from its place.</string>
+    <string name="the_mark_recognized">The symbol has been acknowledged.</string>
+    <string name="the_thread_was_true">The path you followed was genuine.</string>
+    <string name="the_eye_opened">The eye has opened and sees all.</string>
+    <string name="the_silence_broke">The silence has been shattered.</string>
+
+    <string name="it_remains_buried">It still lies hidden beneath.</string>
+    <string name="the_shape_did_not_form">No form took shape.</string>
+    <string name="you_were_not_seen">You went unnoticed.</string>
+    <string name="the_pattern_rejected">The design has cast you out.</string>
+    <string name="it_did_not_know_you">It failed to recognize you.</string>
+    <string name="the_gate_stayed_closed">The gate remained sealed.</string>
+    <string name="the_mark_faded">The symbol has faded away.</string>
+    <string name="the_thread_unraveled">The path has come undone.</string>
+    <string name="the_eye_stayed_shut">The eye remained closed.</string>
+    <string name="the_silence_endured">The silence continues unbroken.</string>
+
+
+
+
 </resources>

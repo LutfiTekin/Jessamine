@@ -34,5 +34,6 @@ data class Place(
     companion object{
         const val UNKNOWN = "Unknown Place"
         fun unknown(coordinates: Coordinates) = Place(UNKNOWN, coordinates = coordinates)
+        fun zero() = Place("")
     }
 }
