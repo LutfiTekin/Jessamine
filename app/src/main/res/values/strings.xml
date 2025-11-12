@@ -25,27 +25,28 @@
     <string name="read_the_wounds">Read the wounds.</string>
     <string name="the_truth_bleeds_through">The truth bleeds through.</string>
 
-    <string name="it_stirs_beneath">It stirs beneath.</string>
-    <string name="the_shape_reveals">The shape reveals.</string>
-    <string name="you_were_not_forgotten">You were not forgotten.</string>
-    <string name="the_pattern_accepts">The pattern accepts.</string>
-    <string name="it_remembers_you">It remembers you.</string>
-    <string name="the_gate_shifted">The gate shifted.</string>
-    <string name="the_mark_recognized">The mark recognized.</string>
-    <string name="the_thread_was_true">The thread was true.</string>
-    <string name="the_eye_opened">The eye opened.</string>
-    <string name="the_silence_broke">The silence broke.</string>
+    <string name="it_stirs_beneath">Something is awakening below the surface.</string>
+    <string name="the_shape_reveals">A hidden form begins to emerge.</string>
+    <string name="you_were_not_forgotten">You have not been forgotten.</string>
+    <string name="the_pattern_accepts">The design welcomes your presence.</string>
+    <string name="it_remembers_you">It recognizes and remembers you.</string>
+    <string name="the_gate_shifted">The gate has moved from its place.</string>
+    <string name="the_mark_recognized">The symbol has been acknowledged.</string>
+    <string name="the_thread_was_true">The path you followed was genuine.</string>
+    <string name="the_eye_opened">The eye has opened and sees all.</string>
+    <string name="the_silence_broke">The silence has been shattered.</string>
 
-    <string name="it_remains_buried">It remains buried.</string>
-    <string name="the_shape_did_not_form">The shape did not form.</string>
-    <string name="you_were_not_seen">You were not seen.</string>
-    <string name="the_pattern_rejected">The pattern rejected.</string>
-    <string name="it_did_not_know_you">It did not know you.</string>
-    <string name="the_gate_stayed_closed">The gate stayed closed.</string>
-    <string name="the_mark_faded">The mark faded.</string>
-    <string name="the_thread_unraveled">The thread unraveled.</string>
-    <string name="the_eye_stayed_shut">The eye stayed shut.</string>
-    <string name="the_silence_endured">The silence endured.</string>
+    <string name="it_remains_buried">It still lies hidden beneath.</string>
+    <string name="the_shape_did_not_form">No form took shape.</string>
+    <string name="you_were_not_seen">You went unnoticed.</string>
+    <string name="the_pattern_rejected">The design has cast you out.</string>
+    <string name="it_did_not_know_you">It failed to recognize you.</string>
+    <string name="the_gate_stayed_closed">The gate remained sealed.</string>
+    <string name="the_mark_faded">The symbol has faded away.</string>
+    <string name="the_thread_unraveled">The path has come undone.</string>
+    <string name="the_eye_stayed_shut">The eye remained closed.</string>
+    <string name="the_silence_endured">The silence continues unbroken.</string>
+
 
 
 
