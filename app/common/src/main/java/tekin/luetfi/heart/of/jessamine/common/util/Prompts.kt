@@ -111,7 +111,7 @@ What debt brought him to this particular stool each dawn?
 
 
 
-fun quizPlacesPrompt(numberOfPlaces: Int = 4, excludedPlaces: List<String> = emptyList()): String {
+fun quizPlacesPrompt(numberOfPlaces: Int = 20, excludedPlaces: List<String> = emptyList()): String {
     return """
 Generate a list of $numberOfPlaces historically or culturally significant locations around the world. Include both entire cities and specific sites or landmarks, with varied geography and types.
 

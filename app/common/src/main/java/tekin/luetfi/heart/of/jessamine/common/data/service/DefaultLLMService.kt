@@ -8,6 +8,8 @@ import tekin.luetfi.heart.of.jessamine.common.domain.model.ChatRequest
 import tekin.luetfi.heart.of.jessamine.common.domain.model.ResponseFormat
 import tekin.luetfi.heart.of.jessamine.common.domain.service.LLMService
 import tekin.luetfi.heart.of.jessamine.common.BuildConfig
+import tekin.luetfi.heart.of.jessamine.common.domain.model.PlaceResponse
+import tekin.luetfi.heart.of.jessamine.common.util.quizPlacesPrompt
 
 class DefaultLLMService(
     private val openRouterAiApi: OpenRouterAiApi,
@@ -37,4 +39,28 @@ class DefaultLLMService(
             null
         }
     }
+
+
+    override suspend fun getPlaces(excludedPlaces: List<String>): List<Place> {
+        val messages = listOf(
+            ChatMessage.userPrompt(quizPlacesPrompt(excludedPlaces = excludedPlaces))
+        )
+
+        val request = ChatRequest(
+            messages = messages,
+            model = BuildConfig.LLM_MODEL
+        )
+
+        return try {
+            val response = openRouterAiApi
+                .getChatCompletion(request)
+                .parseResponseOrNull<PlaceResponse>(moshi)
+                ?: throw Exception()
+            response.places
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
+    }
+
 }

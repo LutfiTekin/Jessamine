@@ -9,7 +9,10 @@ import tekin.luetfi.heart.of.jessamine.common.data.remote.MediaWikiApi
 import tekin.luetfi.heart.of.jessamine.common.data.remote.OpenRouterAiApi
 import tekin.luetfi.heart.of.jessamine.common.data.remote.SpeechifyApi
 import tekin.luetfi.heart.of.jessamine.common.data.repository.DefaultLocationInfoRepository
+import tekin.luetfi.heart.of.jessamine.common.data.repository.DefaultQuizRepository
 import tekin.luetfi.heart.of.jessamine.common.domain.repository.LocationInfoRepository
+import tekin.luetfi.heart.of.jessamine.common.domain.repository.QuizRepository
+import tekin.luetfi.heart.of.jessamine.common.domain.service.LLMService
 import javax.inject.Singleton
 
 
@@ -39,5 +42,9 @@ object RepositoryModule {
         DefaultLocationInfoRepository()
 
 
+    @Provides
+    @Singleton
+    fun provideDefaultQuizRepository(llmService: LLMService): QuizRepository =
+        DefaultQuizRepository(llmService = llmService)
 
 }

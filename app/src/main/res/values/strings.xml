@@ -13,4 +13,16 @@
     <string name="action_quiz_mode">heart.of.jessamine.ACTION_QUIZ_MODE</string>
     <string name="quiz_mode_label_short">Ordeal</string>
     <string name="quiz_mode_label_long">The Listener’s Trial</string>
+
+    <string name="trace_the_forgotten_lines">Trace the forgotten lines.</string>
+    <string name="sift_through_the_ashes">Sift through the ashes.</string>
+    <string name="the_past_whispers_back">The past whispers back.</string>
+    <string name="unlock_the_shrouded_truth">Unlock the shrouded truth.</string>
+    <string name="follow_the_cracks">Follow the cracks.</string>
+    <string name="the_dust_knows_all">The dust knows all.</string>
+    <string name="dig_where_the_light_fades">Dig where the light fades.</string>
+    <string name="the_echo_never_lies">The echo never lies.</string>
+    <string name="read_the_wounds">Read the wounds.</string>
+    <string name="the_truth_bleeds_through">The truth bleeds through.</string>
+
 </resources>
