@@ -41,6 +41,7 @@ import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.EchoesViewModel
 import tekin.luetfi.heart.of.jessamine.common.ui.viewmodel.PlaybackViewModel
 import tekin.luetfi.heart.of.jessamine.ui.component.AnimatedConfirmation
 import tekin.luetfi.heart.of.jessamine.ui.component.AnimatedIndeterminateText
+import tekin.luetfi.heart.of.jessamine.ui.component.GestureSeekOverlay
 import tekin.luetfi.heart.of.jessamine.ui.component.SpeechHighlighter
 import tekin.luetfi.heart.of.jessamine.ui.component.failText
 import tekin.luetfi.heart.of.jessamine.ui.component.initialQuizScreenText
@@ -224,6 +225,12 @@ fun TrialsScreen(modifier: Modifier = Modifier) {
                 onFinish = {
                     backDispatcher?.onBackPressed()
                 })
+        }
+        if (isMediaSectionActive) {
+            GestureSeekOverlay(
+                modifier = Modifier.fillMaxSize(),
+                player = playbackViewModel.exoPlayer
+            )
         }
 
 
